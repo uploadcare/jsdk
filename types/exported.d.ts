@@ -48,8 +48,9 @@ export type ConfigType = {
   userAgentIntegration: string;
   debug: boolean;
   metadata: Metadata | MetadataCallback | null;
+  defaultValue: string[] | null;
 };
-export type ConfigComplexType = Pick<ConfigType, 'metadata'>;
+export type ConfigComplexType = Pick<ConfigType, 'metadata' | 'defaultValue'>;
 export type ConfigPlainType = Omit<ConfigType, keyof ConfigComplexType>;
 export type ConfigAttributesType = KebabCaseKeys<ConfigPlainType> & LowerCaseKeys<ConfigPlainType>;
 

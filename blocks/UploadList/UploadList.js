@@ -142,6 +142,9 @@ export class UploadList extends UploaderBlock {
     this.subConfigValue('multiple', this._throttledHandleCollectionUpdate);
     this.subConfigValue('multipleMin', this._throttledHandleCollectionUpdate);
     this.subConfigValue('multipleMax', this._throttledHandleCollectionUpdate);
+    this.subConfigValue('defaultValue', () => {
+      this.getDefaultValue();
+    });
 
     this.sub('*currentActivity', (currentActivity) => {
       if (!this.couldOpenActivity && currentActivity === this.activityType) {

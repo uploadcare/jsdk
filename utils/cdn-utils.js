@@ -187,3 +187,12 @@ export const createOriginalUrl = (cdnUrl, uuid) => {
   url.pathname = uuid + '/';
   return url.toString();
 };
+
+export const isValidURL = (url) => {
+  try {
+    new URL(url);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};

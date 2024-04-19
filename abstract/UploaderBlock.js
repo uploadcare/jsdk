@@ -11,7 +11,7 @@ import { serializeCsv } from '../blocks/utils/comma-separated.js';
 import { debounce } from '../blocks/utils/debounce.js';
 import { customUserAgent } from '../blocks/utils/userAgent.js';
 import { buildCollectionFileError, buildOutputFileError } from '../utils/buildOutputError.js';
-import { createCdnUrl, createCdnUrlModifiers } from '../utils/cdn-utils.js';
+import { createCdnUrl, createCdnUrlModifiers, extractUuid, isValidURL } from '../utils/cdn-utils.js';
 import { IMAGE_ACCEPT_LIST, fileIsImage, matchExtension, matchMimeType, mergeFileTypes } from '../utils/fileTypes.js';
 import { prettyBytes } from '../utils/prettyBytes.js';
 import { stringToArray } from '../utils/stringToArray.js';
@@ -21,6 +21,7 @@ import { TypedCollection } from './TypedCollection.js';
 import { buildOutputCollectionState } from './buildOutputCollectionState.js';
 import { uploadEntrySchema } from './uploadEntrySchema.js';
 import { parseCdnUrl } from '../utils/parseCdnUrl.js';
+
 export class UploaderBlock extends ActivityBlock {
   couldBeCtxOwner = false;
   isCtxOwner = false;
@@ -820,6 +821,18 @@ export class UploaderBlock extends ActivityBlock {
       return metadata;
     }
     return configValue;
+  }
+
+  getDefaultValue() {
+    /** @type {string[]} */
+    // @ts-ignore
+    const list = this.cfg.defaultValue ?? [];
+
+    for (const key of list) {
+      const uuid = isValidURL(key) ? extractUuid(key) : key;
+
+      this.addFileFromUuid(uuid);
+    }
   }
 
   /** @returns {import('@uploadcare/upload-client').FileFromOptions} */

@@ -58,4 +58,5 @@ export const initialConfig = {
   debug: false,
 
   metadata: null,
+  defaultValue: null,
 };
