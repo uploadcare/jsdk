@@ -24,7 +24,7 @@ export const initialConfig = {
   sourceList: 'local, url, camera, dropbox, gdrive',
   cloudImageEditorTabs: serializeCsv(ALL_TABS),
   maxLocalFileSizeBytes: 0,
-  thumbSize: 76,
+  thumbSize: 64,
   showEmptyList: false,
   useLocalImageEditor: false,
   useCloudImageEditor: true,

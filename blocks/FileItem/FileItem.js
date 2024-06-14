@@ -128,21 +128,31 @@ export class FileItem extends UploaderBlock {
     if (!this._entry) {
       return;
     }
-    let entry = this._entry;
+    const entry = this._entry;
 
-    if (entry.getValue('fileInfo') && entry.getValue('isImage')) {
-      let size = this.cfg.thumbSize;
-      let thumbUrl = this.proxyUrl(
+    if (
+      entry.getValue('fileInfo') &&
+      entry.getValue('isImage') &&
+      (entry.getValue('cdnUrlModifiers') || entry.getValue('isFailedToGenerateThumb'))
+    ) {
+      const size = this.cfg.thumbSize;
+      const cdnThumbUrl = this.proxyUrl(
         createCdnUrl(
           createOriginalUrl(this.cfg.cdnCname, this._entry.getValue('uuid')),
           createCdnUrlModifiers(entry.getValue('cdnUrlModifiers'), `scale_crop/${size}x${size}/center`),
         ),
       );
-      let currentThumbUrl = entry.getValue('thumbUrl');
-      if (currentThumbUrl !== thumbUrl) {
-        entry.setValue('thumbUrl', thumbUrl);
+      const currentThumbUrl = entry.getValue('thumbUrl');
+      if (currentThumbUrl !== cdnThumbUrl) {
+        entry.setValue('thumbUrl', cdnThumbUrl);
         currentThumbUrl?.startsWith('blob:') && URL.revokeObjectURL(currentThumbUrl);
       }
+      return;
+    }
+
+    if (!entry.getValue('isImage')) {
+      const iconColor = window.getComputedStyle(this).getPropertyValue('--clr-generic-file-icon');
+      entry.setValue('thumbUrl', fileCssBg(iconColor));
       return;
     }
 
@@ -150,17 +160,13 @@ export class FileItem extends UploaderBlock {
       return;
     }
 
-    if (entry.getValue('file')?.type.includes('image')) {
-      try {
-        let thumbUrl = await generateThumb(entry.getValue('file'), this.cfg.thumbSize);
-        entry.setValue('thumbUrl', thumbUrl);
-      } catch (err) {
-        let color = window.getComputedStyle(this).getPropertyValue('--clr-generic-file-icon');
-        entry.setValue('thumbUrl', fileCssBg(color));
-      }
-    } else {
-      let color = window.getComputedStyle(this).getPropertyValue('--clr-generic-file-icon');
+    try {
+      const thumbUrl = await generateThumb(entry.getValue('file'), this.cfg.thumbSize);
+      entry.setValue('thumbUrl', thumbUrl);
+    } catch (err) {
+      const color = window.getComputedStyle(this).getPropertyValue('--clr-generic-file-icon');
       entry.setValue('thumbUrl', fileCssBg(color));
+      entry.setValue('isFailedToGenerateThumb', true);
     }
   }
 

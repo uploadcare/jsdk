@@ -103,6 +103,10 @@ export const uploadEntrySchema = Object.freeze({
     value: null,
     nullable: true,
   },
+  isFailedToGenerateThumb: {
+    type: Boolean,
+    value: false,
+  },
   silent: {
     type: Boolean,
     value: false,
