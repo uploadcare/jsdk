@@ -1,6 +1,17 @@
 lr-file-item {
   display: block;
+  content-visibility: auto;
+
+  /* TODO: extract to theme */
+  height: 56px;
+  contain-intrinsic-size: auto 56px;
 }
+
+lr-file-item:last-of-type {
+  height: 52px;
+  contain-intrinsic-size: auto 52px;
+}
+
 lr-file-item > .inner {
   position: relative;
   display: grid;
@@ -13,7 +24,6 @@ lr-file-item > .inner {
   font-size: 0.95em;
   background-color: var(--clr-background);
   border-radius: var(--border-radius-element);
-  transition: var(--transition-duration);
 }
 
 lr-file-item:last-of-type > .inner {
@@ -53,7 +63,6 @@ lr-file-item .file-name-wrapper {
   padding-left: var(--gap-mid);
   overflow: hidden;
   color: var(--clr-txt-light);
-  transition: color var(--transition-duration);
 }
 
 lr-file-item .file-name {
@@ -94,7 +103,6 @@ lr-file-item .badge {
   border-radius: 50%;
   transform: scale(0.3);
   opacity: 0;
-  transition: var(--transition-duration) ease;
   display: flex;
   justify-content: center;
   align-items: center;

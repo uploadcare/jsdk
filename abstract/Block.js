@@ -174,6 +174,7 @@ export class Block extends BaseComponent {
     if (!this.has('*eventEmitter')) {
       this.add('*eventEmitter', new EventEmitter(this.debugPrint.bind(this)));
     }
+
     if (!this.has('*localeManager')) {
       this.add('*localeManager', new LocaleManager(this));
     }
@@ -276,9 +277,6 @@ export class Block extends BaseComponent {
             return false;
           }
           const sharedKey = sharedConfigKey(/** @type {keyof import('../types').ConfigType} */ (key));
-          if (!this.has(sharedKey)) {
-            this.add(sharedKey, initialConfig[/** @type {keyof import('../types').ConfigType} */ (key)]);
-          }
           this.$[sharedKey] = value;
           return true;
         },
@@ -287,10 +285,6 @@ export class Block extends BaseComponent {
          * @param {keyof import('../types').ConfigType} key
          */
         get: (obj, key) => {
-          const sharedKey = sharedConfigKey(key);
-          if (!this.has(sharedKey)) {
-            this.add(sharedKey, initialConfig[key]);
-          }
           return this.$[sharedConfigKey(key)];
         },
       });
@@ -304,11 +298,7 @@ export class Block extends BaseComponent {
    * @param {(value: import('../types').ConfigType[T]) => void} callback
    */
   subConfigValue(key, callback) {
-    const sharedKey = sharedConfigKey(key);
-    if (!this.has(sharedKey)) {
-      this.add(sharedKey, initialConfig[key]);
-    }
-    this.sub(sharedKey, callback);
+    this.sub(sharedConfigKey(key), callback);
   }
 
   /** @param {unknown[]} args */

@@ -150,18 +150,8 @@ export class FileItem extends UploaderBlock {
       return;
     }
 
-    if (entry.getValue('file')?.type.includes('image')) {
-      try {
-        let thumbUrl = await generateThumb(entry.getValue('file'), this.cfg.thumbSize);
-        entry.setValue('thumbUrl', thumbUrl);
-      } catch (err) {
-        let color = window.getComputedStyle(this).getPropertyValue('--clr-generic-file-icon');
-        entry.setValue('thumbUrl', fileCssBg(color));
-      }
-    } else {
-      let color = window.getComputedStyle(this).getPropertyValue('--clr-generic-file-icon');
-      entry.setValue('thumbUrl', fileCssBg(color));
-    }
+    let color = window.getComputedStyle(this).getPropertyValue('--clr-generic-file-icon');
+    entry.setValue('thumbUrl', fileCssBg(color));
   }
 
   /**
@@ -310,8 +300,6 @@ export class FileItem extends UploaderBlock {
 
     /** @private */
     this._observer = new window.IntersectionObserver(this._observerCallback.bind(this), {
-      root: this.parentElement,
-      rootMargin: '50% 0px 50% 0px',
       threshold: [0, 1],
     });
     this._observer.observe(this);
