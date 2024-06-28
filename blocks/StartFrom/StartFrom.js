@@ -1,8 +1,9 @@
+// @ts-check
 import { ActivityBlock } from '../../abstract/ActivityBlock.js';
 
 export class StartFrom extends ActivityBlock {
   historyTracked = true;
-  /** @type {import('../../abstract/ActivityBlock.js').ActivityType} */
+  /** @type {NonNullable<import('../../abstract/ActivityBlock.js').ActivityType>} */
   activityType = 'start-from';
 
   initCallback() {
@@ -11,4 +12,4 @@ export class StartFrom extends ActivityBlock {
   }
 }
 
-StartFrom.template = /* HTML */ ` <div class="content"><slot></slot></div> `;
+StartFrom.template = /* HTML */ `<div class="content"><slot></slot></div>`;

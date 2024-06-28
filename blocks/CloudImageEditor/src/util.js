@@ -3,9 +3,9 @@ import { COMMON_OPERATIONS, transformationsToOperations } from './lib/transforma
 
 export function viewerImageSrc(originalUrl, width, transformations) {
   const MAX_CDN_DIMENSION = 3000;
-  let dpr = window.devicePixelRatio;
-  let size = Math.min(Math.ceil(width * dpr), MAX_CDN_DIMENSION);
-  let quality = dpr >= 2 ? 'lightest' : 'normal';
+  const dpr = window.devicePixelRatio;
+  const size = Math.min(Math.ceil(width * dpr), MAX_CDN_DIMENSION);
+  const quality = dpr >= 2 ? 'lightest' : 'normal';
 
   return createCdnUrl(
     originalUrl,

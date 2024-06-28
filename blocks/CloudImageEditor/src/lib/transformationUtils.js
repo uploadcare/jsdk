@@ -61,7 +61,7 @@ function transformationToStr(operation, options) {
   }
 
   if (operation === 'crop' && options) {
-    let { dimensions, coords } = /** @type {NonNullable<import('../types').Transformations['crop']>} */ (options);
+    const { dimensions, coords } = /** @type {NonNullable<import('../types').Transformations['crop']>} */ (options);
     return `${operation}/${dimensions.join('x')}/${coords.join(',')}`;
   }
 
@@ -78,7 +78,7 @@ export function transformationsToOperations(transformations) {
       (operation) => typeof transformations[operation] !== 'undefined' && transformations[operation] !== null,
     )
       .map((operation) => {
-        let options = transformations[operation];
+        const options = transformations[operation];
         return transformationToStr(operation, options);
       })
       .filter((str) => !!str),

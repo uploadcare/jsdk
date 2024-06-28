@@ -81,9 +81,9 @@ export class TypedCollection {
         if (Object.keys(changeMap).length === 0) {
           return;
         }
-        this.__propertyObservers.forEach((handler) => {
+        for (const handler of this.__propertyObservers) {
           handler({ ...changeMap });
-        });
+        }
         changeMap = Object.create(null);
       });
     };
@@ -95,8 +95,8 @@ export class TypedCollection {
     }
     /** @private */
     this.__notifyTimeout = window.setTimeout(() => {
-      let added = new Set(this.__added);
-      let removed = new Set(this.__removed);
+      const added = new Set(this.__added);
+      const removed = new Set(this.__removed);
       this.__added.clear();
       this.__removed.clear();
       for (const handler of this.__collectionObservers) {
@@ -128,8 +128,8 @@ export class TypedCollection {
    * @returns {string}
    */
   add(init) {
-    let item = new TypedData(this.__typedSchema);
-    for (let prop in init) {
+    const item = new TypedData(this.__typedSchema);
+    for (const prop in init) {
       item.setValue(prop, init[prop]);
     }
     this.__items.add(item.uid);
@@ -137,7 +137,7 @@ export class TypedCollection {
 
     this.__data.add(item.uid, item);
     this.__added.add(item);
-    this.__watchList.forEach((propName) => {
+    for (const propName of this.__watchList) {
       if (!this.__subsMap[item.uid]) {
         this.__subsMap[item.uid] = [];
       }
@@ -146,7 +146,7 @@ export class TypedCollection {
           this.__notifyObservers(propName, item.uid);
         }),
       );
-    });
+    }
     return item.uid;
   }
 
@@ -164,7 +164,7 @@ export class TypedCollection {
    * @returns {any}
    */
   readProp(id, propName) {
-    let item = this.read(id);
+    const item = this.read(id);
     return item.getValue(propName);
   }
 
@@ -175,7 +175,7 @@ export class TypedCollection {
    * @param {T} value
    */
   publishProp(id, propName, value) {
-    let item = this.read(id);
+    const item = this.read(id);
     item.setValue(propName, value);
   }
 
@@ -189,9 +189,9 @@ export class TypedCollection {
   }
 
   clearAll() {
-    this.__items.forEach((id) => {
+    for (const id of this.__items) {
       this.remove(id);
-    });
+    }
   }
 
   /** @param {Function} handler */
@@ -213,13 +213,13 @@ export class TypedCollection {
    * @returns {String[]}
    */
   findItems(checkFn) {
-    let result = [];
-    this.__items.forEach((id) => {
-      let item = this.read(id);
+    const result = [];
+    for (const id of this.__items) {
+      const item = this.read(id);
       if (checkFn(item)) {
         result.push(id);
       }
-    });
+    }
     return result;
   }
 
@@ -235,10 +235,10 @@ export class TypedCollection {
     Data.deleteCtx(this.__ctxId);
     this.__propertyObservers = null;
     this.__collectionObservers = null;
-    for (let id in this.__subsMap) {
-      this.__subsMap[id].forEach((sub) => {
+    for (const id in this.__subsMap) {
+      for (const sub of this.__subsMap[id]) {
         sub.remove();
-      });
+      }
       delete this.__subsMap[id];
     }
   }

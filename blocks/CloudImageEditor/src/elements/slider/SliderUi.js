@@ -10,13 +10,13 @@ export class SliderUi extends Block {
     onChange: null,
     defaultValue: null,
     'on.sliderInput': () => {
-      let value = parseInt(this.ref['input-el'].value, 10);
+      const value = Number.parseInt(this.ref['input-el'].value, 10);
       this._updateValue(value);
-      this.$.onInput && this.$.onInput(value);
+      this.$.onInput?.(value);
     },
     'on.sliderChange': () => {
-      let value = parseInt(this.ref['input-el'].value, 10);
-      this.$.onChange && this.$.onChange(value);
+      const value = Number.parseInt(this.ref['input-el'].value, 10);
+      this.$.onChange?.(value);
     },
   };
 
@@ -64,20 +64,20 @@ export class SliderUi extends Block {
 
     this._observer = new ResizeObserver(() => {
       this._updateSteps();
-      let value = parseInt(this.ref['input-el'].value, 10);
+      const value = Number.parseInt(this.ref['input-el'].value, 10);
       this._updateValue(value);
     });
     this._observer.observe(this);
 
-    this._thumbSize = parseInt(window.getComputedStyle(this).getPropertyValue('--l-thumb-size'), 10);
+    this._thumbSize = Number.parseInt(window.getComputedStyle(this).getPropertyValue('--l-thumb-size'), 10);
 
     setTimeout(() => {
-      let value = parseInt(this.ref['input-el'].value, 10);
+      const value = Number.parseInt(this.ref['input-el'].value, 10);
       this._updateValue(value);
     }, 0);
 
     this.sub('disabled', (disabled) => {
-      let el = this.ref['input-el'];
+      const el = this.ref['input-el'];
       if (disabled) {
         el.setAttribute('disabled', 'disabled');
       } else {
@@ -85,7 +85,7 @@ export class SliderUi extends Block {
       }
     });
 
-    let inputEl = this.ref['input-el'];
+    const inputEl = this.ref['input-el'];
     inputEl.addEventListener('focus', () => {
       this.style.setProperty('--color-effect', 'var(--hover-color-rgb)');
     });
@@ -97,10 +97,10 @@ export class SliderUi extends Block {
   _updateValue(value) {
     this._updateZeroDot(value);
 
-    let { width } = this.getBoundingClientRect();
-    let slope = 100 / (this.$.max - this.$.min);
-    let mappedValue = slope * (value - this.$.min);
-    let offset = (mappedValue * (width - this._thumbSize)) / 100;
+    const { width } = this.getBoundingClientRect();
+    const slope = 100 / (this.$.max - this.$.min);
+    const mappedValue = slope * (value - this.$.min);
+    const offset = (mappedValue * (width - this._thumbSize)) / 100;
 
     window.requestAnimationFrame(() => {
       this.ref['thumb-el'].style.transform = `translateX(${offset}px)`;
@@ -116,10 +116,10 @@ export class SliderUi extends Block {
     } else {
       this._zeroDotEl.style.opacity = '0.2';
     }
-    let { width } = this.getBoundingClientRect();
-    let slope = 100 / (this.$.max - this.$.min);
-    let mappedValue = slope * (this._zero - this.$.min);
-    let offset = (mappedValue * (width - this._thumbSize)) / 100;
+    const { width } = this.getBoundingClientRect();
+    const slope = 100 / (this.$.max - this.$.min);
+    const mappedValue = slope * (this._zero - this.$.min);
+    const offset = (mappedValue * (width - this._thumbSize)) / 100;
     window.requestAnimationFrame(() => {
       this._zeroDotEl.style.transform = `translateX(${offset}px)`;
     });
@@ -128,18 +128,18 @@ export class SliderUi extends Block {
   _updateSteps() {
     const STEP_GAP = 15;
 
-    let stepsEl = this.ref['steps-el'];
-    let { width } = stepsEl.getBoundingClientRect();
-    let half = Math.ceil(width / 2);
-    let count = Math.ceil(half / STEP_GAP) - 2;
+    const stepsEl = this.ref['steps-el'];
+    const { width } = stepsEl.getBoundingClientRect();
+    const half = Math.ceil(width / 2);
+    const count = Math.ceil(half / STEP_GAP) - 2;
 
     if (this._stepsCount === count) {
       return;
     }
 
-    let fr = document.createDocumentFragment();
-    let minorStepEl = document.createElement('div');
-    let borderStepEl = document.createElement('div');
+    const fr = document.createDocumentFragment();
+    const minorStepEl = document.createElement('div');
+    const borderStepEl = document.createElement('div');
     minorStepEl.className = 'minor-step';
     borderStepEl.className = 'border-step';
     fr.appendChild(borderStepEl);
@@ -152,7 +152,7 @@ export class SliderUi extends Block {
     }
     fr.appendChild(borderStepEl.cloneNode());
 
-    let zeroDotEl = document.createElement('div');
+    const zeroDotEl = document.createElement('div');
     zeroDotEl.className = 'zero-dot';
     fr.appendChild(zeroDotEl);
     this._zeroDotEl = zeroDotEl;

@@ -4,12 +4,12 @@ import { applyTemplateData, getPluralObjects } from './template-utils.js';
 describe('template-utils', () => {
   describe('applyTemplateData', () => {
     it('should return the same string if no variables passed', () => {
-      let result = applyTemplateData('Hello world!');
+      const result = applyTemplateData('Hello world!');
       expect(result).to.equal('Hello world!');
     });
 
     it('should replace variables', () => {
-      let result = applyTemplateData("Hello world! My name is {{name}}. I'm {{age}} years old.", {
+      const result = applyTemplateData("Hello world! My name is {{name}}. I'm {{age}} years old.", {
         name: 'John Doe',
         age: 12,
       });
@@ -27,12 +27,12 @@ describe('template-utils', () => {
     });
 
     it('should not replace non-defined variabled', () => {
-      let result = applyTemplateData('My name is {{name}}');
+      const result = applyTemplateData('My name is {{name}}');
       expect(result).to.equal('My name is {{name}}');
     });
 
     it('should accept `transform` option', () => {
-      let result = applyTemplateData(
+      const result = applyTemplateData(
         'My name is {{name}}',
         { name: 'John Doe' },
         { transform: (value) => value.toUpperCase() },

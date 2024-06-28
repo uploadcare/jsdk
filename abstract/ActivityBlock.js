@@ -1,6 +1,6 @@
 // @ts-check
-import { debounce } from '../blocks/utils/debounce.js';
 import { EventType } from '../blocks/UploadCtxProvider/EventEmitter.js';
+import { debounce } from '../blocks/utils/debounce.js';
 import { Block } from './Block.js';
 import { activityBlockCtx } from './CTX.js';
 
@@ -15,7 +15,7 @@ export class ActivityBlock extends Block {
 
   /** @private */
   _deactivate() {
-    let actDesc = ActivityBlock._activityCallbacks.get(this);
+    const actDesc = ActivityBlock._activityCallbacks.get(this);
     this[ACTIVE_PROP] = false;
     this.removeAttribute(ACTIVE_ATTR);
     actDesc?.deactivateCallback?.();
@@ -23,7 +23,7 @@ export class ActivityBlock extends Block {
 
   /** @private */
   _activate() {
-    let actDesc = ActivityBlock._activityCallbacks.get(this);
+    const actDesc = ActivityBlock._activityCallbacks.get(this);
     this.$['*historyBack'] = this.historyBack.bind(this);
     /** @private */
     this[ACTIVE_PROP] = true;
@@ -167,7 +167,7 @@ export class ActivityBlock extends Block {
 
   historyBack() {
     /** @type {String[]} */
-    let history = this.$['*history'];
+    const history = this.$['*history'];
     if (history) {
       let nextActivity = history.pop();
       while (nextActivity === this.activityType) {

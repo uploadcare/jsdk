@@ -26,7 +26,7 @@ function isValidFocusTarget(el) {
  * @returns {boolean}
  */
 function focusTriggersKeyboardModality(el) {
-  let { tagName } = /** @type {Element} */ (el);
+  const { tagName } = /** @type {Element} */ (el);
 
   if (tagName === 'INPUT' && !(/** @type {HTMLInputElement} */ (el).readOnly)) {
     return true;
@@ -157,7 +157,6 @@ export function applyFocusVisiblePolyfill(scope, callback) {
    * first loads and anytime the window is blurred so that they are active when the window regains focus.
    */
   function addInitialPointerMoveListeners() {
-    /* eslint-disable no-use-before-define */
     document.addEventListener('mousemove', onInitialPointerMove);
     document.addEventListener('mousedown', onInitialPointerMove);
     document.addEventListener('mouseup', onInitialPointerMove);
@@ -167,11 +166,9 @@ export function applyFocusVisiblePolyfill(scope, callback) {
     document.addEventListener('touchmove', onInitialPointerMove);
     document.addEventListener('touchstart', onInitialPointerMove);
     document.addEventListener('touchend', onInitialPointerMove);
-    /* eslint-enable no-use-before-define */
   }
 
   function removeInitialPointerMoveListeners() {
-    /* eslint-disable no-use-before-define */
     document.removeEventListener('mousemove', onInitialPointerMove);
     document.removeEventListener('mousedown', onInitialPointerMove);
     document.removeEventListener('mouseup', onInitialPointerMove);
@@ -181,7 +178,6 @@ export function applyFocusVisiblePolyfill(scope, callback) {
     document.removeEventListener('touchmove', onInitialPointerMove);
     document.removeEventListener('touchstart', onInitialPointerMove);
     document.removeEventListener('touchend', onInitialPointerMove);
-    /* eslint-enable no-use-before-define */
   }
 
   /**

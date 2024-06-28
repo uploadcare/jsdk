@@ -1,5 +1,5 @@
-import { debounce } from '../../utils/debounce.js';
 import { Block } from '../../../abstract/Block.js';
+import { debounce } from '../../utils/debounce.js';
 import { classNames } from './lib/classNames.js';
 import { linspace } from './lib/linspace.js';
 import { batchPreloadImages } from './lib/preloadImage.js';
@@ -11,10 +11,13 @@ import { viewerImageSrc } from './util.js';
  * @returns {[Number, Number][]}
  */
 function splitBySections(numbers) {
-  return numbers.reduce(
-    (acc, point, idx) => (idx < numbers.length - 1 ? [...acc, [point, numbers[idx + 1]]] : acc),
-    [],
-  );
+  return numbers.reduce((acc, point, idx) => {
+    if (idx < numbers.length - 1) {
+      acc.push([point, numbers[idx + 1]]);
+      return acc;
+    }
+    return acc;
+  }, []);
 }
 
 /**
@@ -23,10 +26,10 @@ function splitBySections(numbers) {
  * @param {Number} zero
  */
 function calculateOpacities(keypoints, value, zero) {
-  let section = splitBySections(keypoints).find(([left, right]) => left <= value && value <= right);
+  const section = splitBySections(keypoints).find(([left, right]) => left <= value && value <= right);
   return keypoints.map((point) => {
-    let distance = Math.abs(section[0] - section[1]);
-    let relation = Math.abs(value - section[0]) / distance;
+    const distance = Math.abs(section[0] - section[1]);
+    const relation = Math.abs(value - section[0]) / distance;
 
     if (section[0] === point) {
       return value > zero ? 1 : 1 - relation;
@@ -52,8 +55,8 @@ function calculateZIndices(keypoints, zero) {
  * @returns {Number[]}
  */
 function keypointsRange(operation, value) {
-  let n = COLOR_OPERATIONS_CONFIG[operation].keypointsNumber;
-  let { range, zero } = COLOR_OPERATIONS_CONFIG[operation];
+  const n = COLOR_OPERATIONS_CONFIG[operation].keypointsNumber;
+  const { range, zero } = COLOR_OPERATIONS_CONFIG[operation];
 
   return [...new Set([...linspace(range[0], zero, n + 1), ...linspace(zero, range[1], n + 1), zero, value])].sort(
     (a, b) => a - b,
@@ -97,9 +100,9 @@ export class EditorImageFader extends Block {
    * @returns {() => void} Destructor
    */
   _handleImageLoading(src) {
-    let operation = this._operation;
+    const operation = this._operation;
 
-    let loadingOperations = this.$['*loadingOperations'];
+    const loadingOperations = this.$['*loadingOperations'];
     if (!loadingOperations.get(operation)) {
       loadingOperations.set(operation, new Map());
     }
@@ -121,8 +124,8 @@ export class EditorImageFader extends Block {
   _flush() {
     window.cancelAnimationFrame(this._raf);
     this._raf = window.requestAnimationFrame(() => {
-      for (let kp of this._keypoints) {
-        let { image } = kp;
+      for (const kp of this._keypoints) {
+        const { image } = kp;
         if (image) {
           image.style.opacity = kp.opacity.toString();
           image.style.zIndex = kp.zIndex.toString();
@@ -141,14 +144,14 @@ export class EditorImageFader extends Block {
    * @returns {String}
    */
   _imageSrc({ url = this._url, filter = this._filter, operation, value } = {}) {
-    let transformations = { ...this._transformations };
+    const transformations = { ...this._transformations };
 
     if (operation) {
       transformations[operation] = filter ? { name: filter, amount: value } : value;
     }
 
     // do not use getBoundingClientRect because scale transform affects it
-    let width = this.offsetWidth;
+    const width = this.offsetWidth;
     return this.proxyUrl(viewerImageSrc(url, width, transformations));
   }
 
@@ -159,7 +162,7 @@ export class EditorImageFader extends Block {
    * @returns {Keypoint}
    */
   _constructKeypoint(operation, value) {
-    let src = this._imageSrc({ operation, value });
+    const src = this._imageSrc({ operation, value });
     return {
       src,
       image: null,
@@ -188,16 +191,16 @@ export class EditorImageFader extends Block {
    * @param {Number} value
    */
   _addKeypoint(operation, filter, value) {
-    let shouldSkip = () =>
+    const shouldSkip = () =>
       !this._isSame(operation, filter) || this._value !== value || !!this._keypoints.find((kp) => kp.value === value);
 
     if (shouldSkip()) {
       return;
     }
-    let keypoint = this._constructKeypoint(operation, value);
-    let image = new Image();
+    const keypoint = this._constructKeypoint(operation, value);
+    const image = new Image();
     image.src = keypoint.src;
-    let stop = this._handleImageLoading(keypoint.src);
+    const stop = this._handleImageLoading(keypoint.src);
     image.addEventListener('load', stop, { once: true });
     image.addEventListener('error', stop, { once: true });
     keypoint.image = image;
@@ -209,9 +212,9 @@ export class EditorImageFader extends Block {
         if (shouldSkip()) {
           return;
         }
-        let keypoints = this._keypoints;
-        let idx = keypoints.findIndex((kp) => kp.value > value);
-        let insertBeforeNode = idx < keypoints.length ? keypoints[idx].image : null;
+        const keypoints = this._keypoints;
+        const idx = keypoints.findIndex((kp) => kp.value > value);
+        const insertBeforeNode = idx < keypoints.length ? keypoints[idx].image : null;
         if (!this._container || (insertBeforeNode && !this._container.contains(insertBeforeNode))) {
           return;
         }
@@ -233,9 +236,9 @@ export class EditorImageFader extends Block {
 
   /** @param {String | Number} value */
   set(value) {
-    value = typeof value === 'string' ? parseInt(value, 10) : value;
-    this._update(this._operation, value);
-    this._addKeypointDebounced(this._operation, this._filter, value);
+    const normalizedValue = typeof value === 'string' ? Number.parseInt(value, 10) : value;
+    this._update(this._operation, normalizedValue);
+    this._addKeypointDebounced(this._operation, this._filter, normalizedValue);
   }
 
   /**
@@ -247,13 +250,13 @@ export class EditorImageFader extends Block {
     this._operation = operation;
     this._value = value;
 
-    let { zero } = COLOR_OPERATIONS_CONFIG[operation];
+    const { zero } = COLOR_OPERATIONS_CONFIG[operation];
 
-    let keypointValues = this._keypoints.map((kp) => kp.value);
-    let opacities = calculateOpacities(keypointValues, value, zero);
-    let zIndices = calculateZIndices(keypointValues, zero);
+    const keypointValues = this._keypoints.map((kp) => kp.value);
+    const opacities = calculateOpacities(keypointValues, value, zero);
+    const zIndices = calculateZIndices(keypointValues, zero);
 
-    for (let [idx, kp] of Object.entries(this._keypoints)) {
+    for (const [idx, kp] of Object.entries(this._keypoints)) {
       kp.opacity = opacities[idx];
       kp.zIndex = zIndices[idx];
     }
@@ -263,7 +266,7 @@ export class EditorImageFader extends Block {
 
   /** @private */
   _createPreviewImage() {
-    let image = new Image();
+    const image = new Image();
     image.classList.add('fader-image', 'fader-image--preview');
     image.style.opacity = '0';
     return image;
@@ -271,33 +274,33 @@ export class EditorImageFader extends Block {
 
   /** @private */
   async _initNodes() {
-    let fr = document.createDocumentFragment();
+    const fr = document.createDocumentFragment();
     this._previewImage = this._previewImage || this._createPreviewImage();
     !this.contains(this._previewImage) && fr.appendChild(this._previewImage);
 
-    let container = document.createElement('div');
+    const container = document.createElement('div');
     fr.appendChild(container);
 
-    let srcList = this._keypoints.map((kp) => kp.src);
+    const srcList = this._keypoints.map((kp) => kp.src);
 
-    let { images, promise, cancel } = batchPreloadImages(srcList);
-    images.forEach((node) => {
-      let stop = this._handleImageLoading(node.src);
+    const { images, promise, cancel } = batchPreloadImages(srcList);
+    for (const node of images) {
+      const stop = this._handleImageLoading(node.src);
       node.addEventListener('load', stop);
       node.addEventListener('error', stop);
-    });
+    }
     this._cancelLastImages = () => {
       cancel();
       this._cancelLastImages = undefined;
     };
-    let operation = this._operation;
-    let filter = this._filter;
+    const operation = this._operation;
+    const filter = this._filter;
     await promise;
     if (this._isActive && this._isSame(operation, filter)) {
-      this._container && this._container.remove();
+      this._container?.remove();
       this._container = container;
       this._keypoints.forEach((kp, idx) => {
-        let kpImage = images[idx];
+        const kpImage = images[idx];
         kpImage.classList.add('fader-image');
         kp.image = kpImage;
         this._container.appendChild(kpImage);
@@ -311,8 +314,8 @@ export class EditorImageFader extends Block {
   setTransformations(transformations) {
     this._transformations = transformations;
     if (this._previewImage) {
-      let src = this._imageSrc();
-      let stop = this._handleImageLoading(src);
+      const src = this._imageSrc();
+      const stop = this._handleImageLoading(src);
       this._previewImage.src = src;
       this._previewImage.addEventListener('load', stop, { once: true });
       this._previewImage.addEventListener('error', stop, { once: true });
@@ -336,18 +339,18 @@ export class EditorImageFader extends Block {
    * @param {String} [options.filter]
    */
   preload({ url, filter, operation, value }) {
-    this._cancelBatchPreload && this._cancelBatchPreload();
+    this._cancelBatchPreload?.();
 
-    let keypoints = keypointsRange(operation, value);
-    let srcList = keypoints.map((kp) => this._imageSrc({ url, filter, operation, value: kp }));
-    let { cancel } = batchPreloadImages(srcList);
+    const keypoints = keypointsRange(operation, value);
+    const srcList = keypoints.map((kp) => this._imageSrc({ url, filter, operation, value: kp }));
+    const { cancel } = batchPreloadImages(srcList);
 
     this._cancelBatchPreload = cancel;
   }
 
   /** @private */
   _setOriginalSrc(src) {
-    let image = this._previewImage || this._createPreviewImage();
+    const image = this._previewImage || this._createPreviewImage();
     !this.contains(image) && this.appendChild(image);
     this._previewImage = image;
 
@@ -362,7 +365,7 @@ export class EditorImageFader extends Block {
       return;
     }
     image.style.opacity = '0';
-    let stop = this._handleImageLoading(src);
+    const stop = this._handleImageLoading(src);
     image.addEventListener('error', stop, { once: true });
     image.src = src;
     image.addEventListener(
@@ -407,11 +410,11 @@ export class EditorImageFader extends Block {
     this._filter = filter;
     this._fromViewer = fromViewer;
 
-    let isOriginal = typeof value !== 'number' && !filter;
+    const isOriginal = typeof value !== 'number' && !filter;
     if (isOriginal) {
-      let src = this._imageSrc({ operation, value });
+      const src = this._imageSrc({ operation, value });
       this._setOriginalSrc(src);
-      this._container && this._container.remove();
+      this._container?.remove();
       return;
     }
     this._keypoints = keypointsRange(operation, value).map((keyValue) => this._constructKeypoint(operation, keyValue));
@@ -424,8 +427,8 @@ export class EditorImageFader extends Block {
   deactivate({ hide = true } = {}) {
     this._isActive = false;
 
-    this._cancelLastImages && this._cancelLastImages();
-    this._cancelBatchPreload && this._cancelBatchPreload();
+    this._cancelLastImages?.();
+    this._cancelBatchPreload?.();
 
     if (hide && !this._hidden) {
       this._hidden = true;
@@ -440,12 +443,12 @@ export class EditorImageFader extends Block {
       this.addEventListener(
         'transitionend',
         () => {
-          this._container && this._container.remove();
+          this._container?.remove();
         },
         { once: true },
       );
     } else {
-      this._container && this._container.remove();
+      this._container?.remove();
     }
   }
 }

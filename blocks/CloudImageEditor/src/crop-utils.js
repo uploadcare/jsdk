@@ -6,7 +6,7 @@ import { MIN_CROP_SIZE, THUMB_CORNER_SIZE, THUMB_OFFSET, THUMB_SIDE_SIZE } from 
  * @param {{ [key: String]: String | Number }} attrs
  */
 export function setSvgNodeAttrs(node, attrs) {
-  for (let p in attrs) node.setAttributeNS(null, p, attrs[p].toString());
+  for (const p in attrs) node.setAttributeNS(null, p, attrs[p].toString());
 }
 
 /**
@@ -15,7 +15,7 @@ export function setSvgNodeAttrs(node, attrs) {
  * @returns {SVGElement}
  */
 export function createSvgNode(name, attrs = {}) {
-  let node = document.createElementNS('http://www.w3.org/2000/svg', name);
+  const node = document.createElementNS('http://www.w3.org/2000/svg', name);
   setSvgNodeAttrs(node, attrs);
   return node;
 }
@@ -26,25 +26,25 @@ export function createSvgNode(name, attrs = {}) {
  * @param {number} sizeMultiplier
  */
 export function cornerPath(rect, direction, sizeMultiplier) {
-  let { x, y, width, height } = rect;
+  const { x, y, width, height } = rect;
 
-  let wMul = direction.includes('w') ? 0 : 1;
-  let hMul = direction.includes('n') ? 0 : 1;
-  let xSide = [-1, 1][wMul];
-  let ySide = [-1, 1][hMul];
+  const wMul = direction.includes('w') ? 0 : 1;
+  const hMul = direction.includes('n') ? 0 : 1;
+  const xSide = [-1, 1][wMul];
+  const ySide = [-1, 1][hMul];
 
-  let p1 = [
+  const p1 = [
     x + wMul * width + THUMB_OFFSET * xSide,
     y + hMul * height + THUMB_OFFSET * ySide - THUMB_CORNER_SIZE * sizeMultiplier * ySide,
   ];
-  let p2 = [x + wMul * width + THUMB_OFFSET * xSide, y + hMul * height + THUMB_OFFSET * ySide];
-  let p3 = [
+  const p2 = [x + wMul * width + THUMB_OFFSET * xSide, y + hMul * height + THUMB_OFFSET * ySide];
+  const p3 = [
     x + wMul * width - THUMB_CORNER_SIZE * sizeMultiplier * xSide + THUMB_OFFSET * xSide,
     y + hMul * height + THUMB_OFFSET * ySide,
   ];
 
-  let path = `M ${p1[0]} ${p1[1]} L ${p2[0]} ${p2[1]} L ${p3[0]} ${p3[1]}`;
-  let center = p2;
+  const path = `M ${p1[0]} ${p1[1]} L ${p2[0]} ${p2[1]} L ${p3[0]} ${p3[1]}`;
+  const center = p2;
 
   return {
     d: path,
@@ -58,18 +58,19 @@ export function cornerPath(rect, direction, sizeMultiplier) {
  * @param {number} sizeMultiplier
  */
 export function sidePath(rect, direction, sizeMultiplier) {
-  let { x, y, width, height } = rect;
+  const { x, y, width, height } = rect;
 
-  let wMul = ['n', 's'].includes(direction)
+  const wMul = ['n', 's'].includes(direction)
     ? 0.5
     : { w: 0, e: 1 }[/** @type {Extract<import('./types.js').Direction, 'w' | 'e'>} */ (direction)];
-  let hMul = ['w', 'e'].includes(direction)
+  const hMul = ['w', 'e'].includes(direction)
     ? 0.5
     : { n: 0, s: 1 }[/** @type {Extract<import('./types.js').Direction, 'n' | 's'>} */ (direction)];
-  let xSide = [-1, 1][wMul];
-  let ySide = [-1, 1][hMul];
+  const xSide = [-1, 1][wMul];
+  const ySide = [-1, 1][hMul];
 
-  let p1, p2;
+  let p1;
+  let p2;
   if (['n', 's'].includes(direction)) {
     p1 = [x + wMul * width - (THUMB_SIDE_SIZE * sizeMultiplier) / 2, y + hMul * height + THUMB_OFFSET * ySide];
     p2 = [x + wMul * width + (THUMB_SIDE_SIZE * sizeMultiplier) / 2, y + hMul * height + THUMB_OFFSET * ySide];
@@ -77,8 +78,8 @@ export function sidePath(rect, direction, sizeMultiplier) {
     p1 = [x + wMul * width + THUMB_OFFSET * xSide, y + hMul * height - (THUMB_SIDE_SIZE * sizeMultiplier) / 2];
     p2 = [x + wMul * width + THUMB_OFFSET * xSide, y + hMul * height + (THUMB_SIDE_SIZE * sizeMultiplier) / 2];
   }
-  let path = `M ${p1[0]} ${p1[1]} L ${p2[0]} ${p2[1]}`;
-  let center = [p2[0] - (p2[0] - p1[0]) / 2, p2[1] - (p2[1] - p1[1]) / 2];
+  const path = `M ${p1[0]} ${p1[1]} L ${p2[0]} ${p2[1]}`;
+  const center = [p2[0] - (p2[0] - p1[0]) / 2, p2[1] - (p2[1] - p1[1]) / 2];
 
   return { d: path, center };
 }
@@ -671,7 +672,7 @@ export function isRectMatchesAspectRatio(rect, aspectRatio) {
  * @returns {import('./types.js').ImageSize}
  */
 export function rotateSize({ width, height }, angle) {
-  let swap = (angle / 90) % 2 !== 0;
+  const swap = (angle / 90) % 2 !== 0;
   return { width: swap ? height : width, height: swap ? width : height };
 }
 
@@ -682,7 +683,8 @@ export function rotateSize({ width, height }, angle) {
  */
 export function calculateMaxCenteredCropFrame(width, height, aspectRatio) {
   const imageAspectRatio = width / height;
-  let cropWidth, cropHeight;
+  let cropWidth;
+  let cropHeight;
 
   if (imageAspectRatio > aspectRatio) {
     cropWidth = Math.round(height * aspectRatio);

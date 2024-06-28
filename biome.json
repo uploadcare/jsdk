@@ -1,0 +1,57 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.8.2/schema.json",
+  "files": {
+    "ignore": [
+      "**/svg-sprite.js",
+      "./web/**",
+      "./index.ssr.js",
+      "./index.ssr.d.ts",
+      "./env.d.ts",
+      "./env.template.d.ts",
+      "./build-svg-sprite.d.ts",
+      "./build-ssr-stubs.d.ts",
+      "./build-jsx-types.d.ts",
+      "./build-items.d.ts",
+      "./build.d.ts",
+      "./index.d.ts",
+      "./test-locales.d.ts",
+      "./abstract/**/*.d.ts",
+      "./blocks/**/*.d.ts",
+      "./locales/**/*.d.ts",
+      "./solutions/**/*.d.ts",
+      "./utils/**/*.d.ts",
+      "./demo/**/*.d.ts"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "formatWithErrors": false,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineEnding": "lf",
+    "lineWidth": 120,
+    "attributePosition": "auto"
+  },
+  "organizeImports": {
+    "enabled": true
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "jsxQuoteStyle": "double",
+      "quoteProperties": "asNeeded",
+      "trailingCommas": "all",
+      "semicolons": "always",
+      "arrowParentheses": "always",
+      "bracketSpacing": true,
+      "bracketSameLine": false,
+      "quoteStyle": "single",
+      "attributePosition": "auto"
+    }
+  }
+}

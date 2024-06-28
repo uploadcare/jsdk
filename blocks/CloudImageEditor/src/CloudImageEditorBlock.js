@@ -154,7 +154,7 @@ export class CloudImageEditorBlock extends Block {
     });
 
     this.sub('src', (src) => {
-      let el = this.ref['img-el'];
+      const el = this.ref['img-el'];
       if (el.src !== src) {
         this._imgLoading = true;
         el.src = src || TRANSPARENT_PIXEL_SRC;
@@ -192,12 +192,12 @@ export class CloudImageEditorBlock extends Block {
         if (Object.keys(transformations).length === 0) {
           return;
         }
-        let originalUrl = this.$['*originalUrl'];
-        let cdnUrlModifiers = createCdnUrlModifiers(transformationsToOperations(transformations), 'preview');
-        let cdnUrl = createCdnUrl(originalUrl, cdnUrlModifiers);
+        const originalUrl = this.$['*originalUrl'];
+        const cdnUrlModifiers = createCdnUrlModifiers(transformationsToOperations(transformations), 'preview');
+        const cdnUrl = createCdnUrl(originalUrl, cdnUrlModifiers);
 
         /** @type {import('./types.js').ApplyResult} */
-        let eventData = {
+        const eventData = {
           originalUrl,
           cdnUrlModifiers,
           cdnUrl,

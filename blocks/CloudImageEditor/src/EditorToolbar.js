@@ -1,6 +1,6 @@
 // @ts-check
-import { debounce } from '../../utils/debounce.js';
 import { Block } from '../../../abstract/Block.js';
+import { debounce } from '../../utils/debounce.js';
 import { EditorCropButtonControl } from './EditorCropButtonControl.js';
 import { EditorFilterControl } from './EditorFilterControl.js';
 import { EditorOperationControl } from './EditorOperationControl.js';
@@ -97,7 +97,7 @@ export class EditorToolbar extends Block {
         visible: 'tab-toggles--visible',
       },
       'on.cancel': () => {
-        this._cancelPreload && this._cancelPreload();
+        this._cancelPreload?.();
         this.$['*on.cancel']();
       },
       'on.apply': () => {
@@ -142,7 +142,7 @@ export class EditorToolbar extends Block {
    * @param {String} operation
    */
   _createOperationControl(operation) {
-    let el = new EditorOperationControl();
+    const el = new EditorOperationControl();
     // @ts-expect-error TODO: fix
     el.operation = operation;
     return el;
@@ -153,7 +153,7 @@ export class EditorToolbar extends Block {
    * @param {String} filter
    */
   _createFilterControl(filter) {
-    let el = new EditorFilterControl();
+    const el = new EditorFilterControl();
     // @ts-expect-error TODO: fix
     el.filter = filter;
     return el;
@@ -164,7 +164,7 @@ export class EditorToolbar extends Block {
    * @param {String} operation
    */
   _createToggleControl(operation) {
-    let el = new EditorCropButtonControl();
+    const el = new EditorCropButtonControl();
     // @ts-expect-error TODO: fix
     el.operation = operation;
     return el;
@@ -175,31 +175,26 @@ export class EditorToolbar extends Block {
    * @param {String} tabId
    */
   _renderControlsList(tabId) {
-    let listEl = this.ref[`controls-list-${tabId}`];
-    let fr = document.createDocumentFragment();
+    const listEl = this.ref[`controls-list-${tabId}`];
+    const fr = document.createDocumentFragment();
 
     if (tabId === TabId.CROP) {
-      this.$.cropOperations.forEach(
-        /** @param {string} operation */ (operation) => {
-          let el = this._createToggleControl(operation);
-          // @ts-ignore
-          fr.appendChild(el);
-        },
-      );
+      this.$.cropOperations.forEach();
+      for (const operation of /** @type {string[]} */ (this.$.cropOperations)) {
+        const el = this._createToggleControl(operation);
+        fr.appendChild(el);
+      }
     } else if (tabId === TabId.FILTERS) {
-      [FAKE_ORIGINAL_FILTER, ...this.$.filters].forEach((filterId) => {
-        let el = this._createFilterControl(filterId);
+      for (const filterId of [FAKE_ORIGINAL_FILTER, ...this.$.filters]) {
+        const el = this._createFilterControl(filterId);
+        fr.appendChild(el);
+      }
+    } else if (tabId === TabId.TUNING) {
+      for (const operation of /** @type {string[]} */ (this.$.colorOperations)) {
+        const el = this._createOperationControl(operation);
         // @ts-ignore
         fr.appendChild(el);
-      });
-    } else if (tabId === TabId.TUNING) {
-      this.$.colorOperations.forEach(
-        /** @param {string} operation */ (operation) => {
-          let el = this._createOperationControl(operation);
-          // @ts-ignore
-          fr.appendChild(el);
-        },
-      );
+      }
     }
 
     [...fr.children].forEach((el, idx) => {
@@ -228,10 +223,10 @@ export class EditorToolbar extends Block {
       this.$['*cropperEl'].deactivate();
     }
 
-    for (let tabId of ALL_TABS) {
-      let isCurrentTab = tabId === id;
+    for (const tabId of ALL_TABS) {
+      const isCurrentTab = tabId === id;
 
-      let tabToggleEl = this.ref[`tab-toggle-${tabId}`];
+      const tabToggleEl = this.ref[`tab-toggle-${tabId}`];
       tabToggleEl.active = isCurrentTab;
 
       if (isCurrentTab) {
@@ -249,7 +244,7 @@ export class EditorToolbar extends Block {
    * @param {String} tabId
    */
   _unmountTabControls(tabId) {
-    let listEl = this.ref[`controls-list-${tabId}`];
+    const listEl = this.ref[`controls-list-${tabId}`];
     if (listEl) {
       listEl.innerHTML = '';
     }
@@ -257,18 +252,18 @@ export class EditorToolbar extends Block {
 
   /** @private */
   _syncTabIndicator() {
-    let tabToggleEl = this.ref[`tab-toggle-${this.$['*tabId']}`];
-    let indicatorEl = this.ref['tabs-indicator'];
+    const tabToggleEl = this.ref[`tab-toggle-${this.$['*tabId']}`];
+    const indicatorEl = this.ref['tabs-indicator'];
     indicatorEl.style.transform = `translateX(${tabToggleEl.offsetLeft}px)`;
   }
 
   /** @private */
   _preloadEditedImage() {
     if (this.$['*imgContainerEl'] && this.$['*originalUrl']) {
-      let width = this.$['*imgContainerEl'].offsetWidth;
-      let src = this.proxyUrl(viewerImageSrc(this.$['*originalUrl'], width, this.$['*editorTransformations']));
-      this._cancelPreload && this._cancelPreload();
-      let { cancel } = batchPreloadImages([src]);
+      const width = this.$['*imgContainerEl'].offsetWidth;
+      const src = this.proxyUrl(viewerImageSrc(this.$['*originalUrl'], width, this.$['*editorTransformations']));
+      this._cancelPreload?.();
+      const { cancel } = batchPreloadImages([src]);
       this._cancelPreload = () => {
         cancel();
         this._cancelPreload = undefined;
@@ -294,15 +289,15 @@ export class EditorToolbar extends Block {
     if (this.$['*tabId'] === TabId.FILTERS) {
       visible = true;
       if (this.$['*currentFilter'] && transformations?.filter?.name === this.$['*currentFilter']) {
-        let value = transformations?.filter?.amount || 100;
-        text = this.$['*currentFilter'] + ' ' + value;
+        const value = transformations?.filter?.amount || 100;
+        text = `${this.$['*currentFilter']} ${value}`;
       } else {
         text = this.l10n(FAKE_ORIGINAL_FILTER);
       }
     } else if (this.$['*tabId'] === TabId.TUNING && currentOperation) {
       visible = true;
-      let value = transformations?.[currentOperation] || COLOR_OPERATIONS_CONFIG[currentOperation].zero;
-      text = this.l10n(currentOperation) + ' ' + value;
+      const value = transformations?.[currentOperation] || COLOR_OPERATIONS_CONFIG[currentOperation].zero;
+      text = `${this.l10n(currentOperation)} ${value}`;
     }
     if (visible) {
       this.$['*operationTooltip'] = text;
@@ -324,7 +319,7 @@ export class EditorToolbar extends Block {
     });
 
     this.sub('*editorTransformations', (editorTransformations) => {
-      let appliedFilter = editorTransformations?.filter?.name;
+      const appliedFilter = editorTransformations?.filter?.name;
       if (this.$['*currentFilter'] !== appliedFilter) {
         this.$['*currentFilter'] = appliedFilter;
       }
@@ -343,7 +338,7 @@ export class EditorToolbar extends Block {
     });
 
     this.sub('*originalUrl', () => {
-      this.$['*faderEl'] && this.$['*faderEl'].deactivate();
+      this.$['*faderEl']?.deactivate();
     });
 
     this.sub('*editorTransformations', (transformations) => {
@@ -355,11 +350,11 @@ export class EditorToolbar extends Block {
 
     this.sub('*loadingOperations', (/** @type {import('./types.js').LoadingOperations} */ loadingOperations) => {
       let anyLoading = false;
-      for (let [, mapping] of loadingOperations.entries()) {
+      for (const [, mapping] of loadingOperations.entries()) {
         if (anyLoading) {
           break;
         }
-        for (let [, loading] of mapping.entries()) {
+        for (const [, loading] of mapping.entries()) {
           if (loading) {
             anyLoading = true;
             break;

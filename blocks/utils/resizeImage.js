@@ -6,12 +6,12 @@ export function generateThumb(imgFile, size = 40) {
   if (imgFile.type === 'image/svg+xml') {
     return URL.createObjectURL(imgFile);
   }
-  let canvas = document.createElement('canvas');
-  let ctx = canvas.getContext('2d');
-  let img = new Image();
-  let promise = new Promise((resolve, reject) => {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  const img = new Image();
+  const promise = new Promise((resolve, reject) => {
     img.onload = () => {
-      let ratio = img.height / img.width;
+      const ratio = img.height / img.width;
       if (ratio > 1) {
         canvas.width = size;
         canvas.height = size * ratio;
@@ -27,7 +27,7 @@ export function generateThumb(imgFile, size = 40) {
           reject();
           return;
         }
-        let url = URL.createObjectURL(blob);
+        const url = URL.createObjectURL(blob);
         resolve(url);
       });
     };

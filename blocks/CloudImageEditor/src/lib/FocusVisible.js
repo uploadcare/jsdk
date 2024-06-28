@@ -1,5 +1,6 @@
 import { applyFocusVisiblePolyfill } from './applyFocusVisiblePolyfill.js';
 
+// biome-ignore lint/complexity/noStaticOnlyClass: It will be removed soon
 export class FocusVisible {
   /**
    * @param {boolean} focusVisible
@@ -7,7 +8,7 @@ export class FocusVisible {
    */
   static handleFocusVisible(focusVisible, element) {
     if (focusVisible) {
-      let customOutline = element.style.getPropertyValue('--focus-visible-outline');
+      const customOutline = element.style.getPropertyValue('--focus-visible-outline');
       element.style.outline = customOutline || '2px solid var(--color-focus-ring)';
     } else {
       element.style.outline = 'none';
@@ -24,7 +25,7 @@ export class FocusVisible {
     if (!FocusVisible._destructors.has(scope)) {
       return;
     }
-    let removeFocusVisiblePolyfill = FocusVisible._destructors.get(scope);
+    const removeFocusVisiblePolyfill = FocusVisible._destructors.get(scope);
     removeFocusVisiblePolyfill();
     FocusVisible._destructors.delete(scope);
   }

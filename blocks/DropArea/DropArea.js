@@ -107,13 +107,13 @@ export class DropArea extends UploaderBlock {
           return;
         }
 
-        items.forEach((/** @type {import('./getDropItems.js').DropItem} */ item) => {
+        for (const item of items) {
           if (item.type === 'url') {
             this.addFileFromUrl(item.url, { source: UploadSource.DROP_AREA });
           } else if (item.type === 'file') {
             this.addFileFromObject(item.file, { source: UploadSource.DROP_AREA, fullPath: item.fullPath });
           }
-        });
+        }
         if (this.uploadCollection.size) {
           this.set$({
             '*currentActivity': ActivityBlock.activities.UPLOAD_LIST,
@@ -123,7 +123,7 @@ export class DropArea extends UploaderBlock {
       },
     });
 
-    let contentWrapperEl = this.ref['content-wrapper'];
+    const contentWrapperEl = this.ref['content-wrapper'];
     if (contentWrapperEl) {
       this._destroyContentWrapperDropzone = addDropzone({
         element: contentWrapperEl,
@@ -210,9 +210,9 @@ export class DropArea extends UploaderBlock {
 
   /** @private */
   _couldHandleFiles() {
-    let isMultiple = this.cfg.multiple;
-    let multipleMax = this.cfg.multipleMax;
-    let currentFilesCount = this.uploadCollection.size;
+    const isMultiple = this.cfg.multiple;
+    const multipleMax = this.cfg.multipleMax;
+    const currentFilesCount = this.uploadCollection.size;
 
     if (isMultiple && multipleMax && currentFilesCount >= multipleMax) {
       return false;

@@ -15,39 +15,42 @@ type CommonHtmlAttributes<T> = Partial<
   Pick<React.HTMLAttributes<T>, 'id' | 'children' | 'hidden'> & { class: React.HTMLAttributes<T>['className'] }
 >;
 
-type CustomElement<C, A = {}> = React.DetailedHTMLProps<CommonHtmlAttributes<C>, C> & A;
+type CustomElement<C, A> = React.DetailedHTMLProps<CommonHtmlAttributes<C>, C> & A;
+
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+type UntypedElement = any;
 
 declare namespace JSX {
   interface IntrinsicElements {
-    'lr-crop-frame': any;
-    'lr-editor-crop-button-control': any;
-    'lr-editor-filter-control': any;
-    'lr-editor-operation-control': any;
-    'lr-editor-image-cropper': any;
-    'lr-editor-image-fader': any;
-    'lr-editor-scroller': any;
-    'lr-editor-slider': any;
-    'lr-editor-toolbar': any;
-    'lr-lr-btn-ui': any;
-    'lr-line-loader-ui': any;
-    'lr-presence-toggle': any;
-    'lr-slider-ui': any;
-    'lr-icon': any;
-    'lr-img': any;
-    'lr-simple-btn': any;
-    'lr-start-from': any;
-    'lr-drop-area': any;
-    'lr-source-btn': any;
-    'lr-source-list': any;
-    'lr-file-item': any;
-    'lr-modal': any;
-    'lr-upload-list': any;
-    'lr-url-source': any;
-    'lr-camera-source': any;
-    'lr-progress-bar-common': any;
-    'lr-progress-bar': any;
-    'lr-external-source': any;
-    'lr-cloud-image-editor-activity': any;
+    'lr-crop-frame': UntypedElement;
+    'lr-editor-crop-button-control': UntypedElement;
+    'lr-editor-filter-control': UntypedElement;
+    'lr-editor-operation-control': UntypedElement;
+    'lr-editor-image-cropper': UntypedElement;
+    'lr-editor-image-fader': UntypedElement;
+    'lr-editor-scroller': UntypedElement;
+    'lr-editor-slider': UntypedElement;
+    'lr-editor-toolbar': UntypedElement;
+    'lr-lr-btn-ui': UntypedElement;
+    'lr-line-loader-ui': UntypedElement;
+    'lr-presence-toggle': UntypedElement;
+    'lr-slider-ui': UntypedElement;
+    'lr-icon': UntypedElement;
+    'lr-img': UntypedElement;
+    'lr-simple-btn': UntypedElement;
+    'lr-start-from': UntypedElement;
+    'lr-drop-area': UntypedElement;
+    'lr-source-btn': UntypedElement;
+    'lr-source-list': UntypedElement;
+    'lr-file-item': UntypedElement;
+    'lr-modal': UntypedElement;
+    'lr-upload-list': UntypedElement;
+    'lr-url-source': UntypedElement;
+    'lr-camera-source': UntypedElement;
+    'lr-progress-bar-common': UntypedElement;
+    'lr-progress-bar': UntypedElement;
+    'lr-external-source': UntypedElement;
+    'lr-cloud-image-editor-activity': UntypedElement;
     'lr-cloud-image-editor-block': CustomElement<
       CloudImageEditorBlock,
       CtxAttributes & ({ uuid: string } | { 'cdn-url': string }) & Partial<{ tabs: string; 'crop-preset': string }>

@@ -3,7 +3,7 @@
  * @returns {String}
  */
 function createSvgBlobUrl(svg) {
-  let blob = new Blob([svg], {
+  const blob = new Blob([svg], {
     type: 'image/svg+xml',
   });
   return URL.createObjectURL(blob);

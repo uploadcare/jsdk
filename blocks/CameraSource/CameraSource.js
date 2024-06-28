@@ -1,8 +1,8 @@
-import { UploaderBlock } from '../../abstract/UploaderBlock.js';
 import { ActivityBlock } from '../../abstract/ActivityBlock.js';
+import { UploaderBlock } from '../../abstract/UploaderBlock.js';
+import { UploadSource } from '../utils/UploadSource.js';
 import { canUsePermissionsApi } from '../utils/abilities.js';
 import { debounce } from '../utils/debounce.js';
-import { UploadSource } from '../utils/UploadSource.js';
 
 export class CameraSource extends UploaderBlock {
   couldBeCtxOwner = true;
@@ -98,7 +98,7 @@ export class CameraSource extends UploaderBlock {
   async _subscribePermissions() {
     try {
       // @ts-ignore
-      let permissionsResponse = await navigator.permissions.query({ name: 'camera' });
+      const permissionsResponse = await navigator.permissions.query({ name: 'camera' });
       permissionsResponse.addEventListener('change', this._handlePermissionsChange);
     } catch (err) {
       console.log('Failed to use permissions API. Fallback to manual request mode.', err);
@@ -108,7 +108,7 @@ export class CameraSource extends UploaderBlock {
 
   /** @private */
   async _capture() {
-    let constr = {
+    const constr = {
       video: {
         width: {
           ideal: 1920,
@@ -134,7 +134,7 @@ export class CameraSource extends UploaderBlock {
 
     try {
       this._setPermissionsState('prompt');
-      let stream = await navigator.mediaDevices.getUserMedia(constr);
+      const stream = await navigator.mediaDevices.getUserMedia(constr);
       stream.addEventListener('inactive', () => {
         this._setPermissionsState('denied');
       });
@@ -159,15 +159,15 @@ export class CameraSource extends UploaderBlock {
 
   /** @private */
   _shot() {
-    this._canvas.height = this.ref.video['videoHeight'];
-    this._canvas.width = this.ref.video['videoWidth'];
+    this._canvas.height = this.ref.video.videoHeight;
+    this._canvas.width = this.ref.video.videoWidth;
     // @ts-ignore
     this._ctx.drawImage(this.ref.video, 0, 0);
     const date = Date.now();
     const name = `camera-${date}.jpeg`;
     const format = 'image/jpeg';
     this._canvas.toBlob((blob) => {
-      let file = new File([blob], name, {
+      const file = new File([blob], name, {
         lastModified: date,
         type: format,
       });
@@ -190,8 +190,8 @@ export class CameraSource extends UploaderBlock {
     });
 
     try {
-      let deviceList = await navigator.mediaDevices.enumerateDevices();
-      let cameraSelectOptions = deviceList
+      const deviceList = await navigator.mediaDevices.enumerateDevices();
+      const cameraSelectOptions = deviceList
         .filter((info) => {
           return info.kind === 'videoinput';
         })

@@ -1,5 +1,5 @@
 // @ts-check
-import { startKeyUX, hiddenKeyUX, jumpKeyUX, focusGroupKeyUX, pressKeyUX } from 'keyux';
+import { focusGroupKeyUX, hiddenKeyUX, jumpKeyUX, pressKeyUX, startKeyUX } from 'keyux';
 
 /**
  * MinimalWindow interface is not exported by keyux, so we import it here using tricky way.

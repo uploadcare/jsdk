@@ -1,25 +1,25 @@
 import React from 'react';
 import { expectType } from 'tsd';
 import '../jsx.js';
-import { OutputFileEntry, FuncCollectionValidator, FuncFileValidator } from '../index.js';
+import type { FuncCollectionValidator, FuncFileValidator, OutputFileEntry } from '../index.js';
 
 // @ts-expect-error untyped props
-() => <lr-config ctx-name="1" something="wrong"></lr-config>;
+() => <lr-config ctx-name="1" something="wrong" />;
 
 // @ts-expect-error missing ctx-name
-() => <lr-config></lr-config>;
+() => <lr-config />;
 
 // allow common html attributes and required ctx-name
-() => <lr-config ctx-name="1" id="1" class="1" hidden></lr-config>;
+() => <lr-config ctx-name="1" id="1" class="1" hidden />;
 
 // allow key prop
-() => <lr-config ctx-name="1" key={1}></lr-config>;
+() => <lr-config ctx-name="1" key={1} />;
 
 // allow useRef hook
 () => {
   const ref = React.useRef<InstanceType<Config> | null>(null);
   expectType<InstanceType<Config> | null>(ref.current);
-  <lr-config ctx-name="1" ref={ref}></lr-config>;
+  <lr-config ctx-name="1" ref={ref} />;
 };
 
 // allow callback ref
@@ -29,14 +29,14 @@ import { OutputFileEntry, FuncCollectionValidator, FuncFileValidator } from '../
     ref={(el) => {
       expectType<InstanceType<Config> | null>(el);
     }}
-  ></lr-config>;
+  />;
 };
 
 // allow createRef
 () => {
   const ref = React.createRef<InstanceType<Config>>();
   expectType<InstanceType<Config> | null>(ref.current);
-  <lr-config ctx-name="1" ref={ref}></lr-config>;
+  <lr-config ctx-name="1" ref={ref} />;
 };
 
 // accept config attributes
@@ -67,8 +67,6 @@ import { OutputFileEntry, FuncCollectionValidator, FuncFileValidator } from '../
   }
 };
 
-
-
 // allow to pass validators
 () => {
   const ref = React.useRef<InstanceType<Config> | null>(null);
@@ -78,13 +76,13 @@ import { OutputFileEntry, FuncCollectionValidator, FuncFileValidator } from '../
     const maxSize: FuncFileValidator = (outputEntry, block) => ({
       message: block.l10n('images-only-accepted'),
       payload: { entry: outputEntry },
-    })
+    });
 
     const maxCollection: FuncCollectionValidator = (collection, block) => ({
       message: block.l10n('some-files-were-not-uploaded'),
-    })
+    });
 
-    config.fileValidators = [maxSize]
-    config.collectionValidators = [maxCollection]
+    config.fileValidators = [maxSize];
+    config.collectionValidators = [maxCollection];
   }
 };

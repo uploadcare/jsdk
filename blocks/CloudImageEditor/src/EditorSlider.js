@@ -47,25 +47,25 @@ export class EditorSlider extends Block {
 
   /** @private */
   _initializeValues() {
-    let { range, zero } = COLOR_OPERATIONS_CONFIG[this._operation];
-    let [min, max] = range;
+    const { range, zero } = COLOR_OPERATIONS_CONFIG[this._operation];
+    const [min, max] = range;
 
     this.$.min = min;
     this.$.max = max;
     this.$.zero = zero;
 
-    let transformation = this.$['*editorTransformations'][this._operation];
+    const transformation = this.$['*editorTransformations'][this._operation];
     if (this._controlType === ControlType.FILTER) {
       let value = max;
       if (transformation) {
-        let { name, amount } = transformation;
+        const { name, amount } = transformation;
         value = name === this._filter ? amount : max;
       }
       this.$.value = value;
       this.$.defaultValue = value;
     }
     if (this._controlType === ControlType.COLOR_OPERATION) {
-      let value = typeof transformation !== 'undefined' ? transformation : zero;
+      const value = typeof transformation !== 'undefined' ? transformation : zero;
       this.$.value = value;
       this.$.defaultValue = value;
     }
@@ -84,7 +84,7 @@ export class EditorSlider extends Block {
     }
 
     /** @type {import('./types.js').Transformations} */
-    let transformations = {
+    const transformations = {
       ...this.$['*editorTransformations'],
       [this._operation]: operationValue,
     };
@@ -104,7 +104,7 @@ export class EditorSlider extends Block {
     });
 
     this.sub('value', (value) => {
-      let tooltip = `${this._filter || this._operation} ${value}`;
+      const tooltip = `${this._filter || this._operation} ${value}`;
       this.$['*operationTooltip'] = tooltip;
     });
   }

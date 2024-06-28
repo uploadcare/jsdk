@@ -1,6 +1,6 @@
-import { isSecureTokenExpired } from './isSecureTokenExpired';
 import { expect } from '@esm-bundle/chai';
 import * as sinon from 'sinon';
+import { isSecureTokenExpired } from './isSecureTokenExpired';
 
 const DATE_NOW = 60 * 1000;
 const THRESHOLD = 10 * 1000;

@@ -1,15 +1,15 @@
 import { expect } from '@esm-bundle/chai';
 import {
-  normalizeCdnOperation,
-  joinCdnOperations,
-  createCdnUrlModifiers,
   createCdnUrl,
+  createCdnUrlModifiers,
   createOriginalUrl,
-  extractFilename,
-  trimFilename,
-  extractUuid,
-  extractOperations,
   extractCdnUrlModifiers,
+  extractFilename,
+  extractOperations,
+  extractUuid,
+  joinCdnOperations,
+  normalizeCdnOperation,
+  trimFilename,
 } from './cdn-utils.js';
 
 const falsyValues = ['', undefined, null, false, true, 0, 10];
@@ -22,7 +22,7 @@ describe('cdn-utils/normalizeCdnOperation', () => {
   });
 
   it('should return empty string if falsy value is passed', () => {
-    for (let val of falsyValues) {
+    for (const val of falsyValues) {
       expect(normalizeCdnOperation(val)).to.eq('');
     }
   });

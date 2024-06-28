@@ -11,7 +11,7 @@ export class EditorScroller extends Block {
       (e) => {
         e.preventDefault();
 
-        let { deltaY, deltaX } = e;
+        const { deltaY, deltaX } = e;
         if (Math.abs(deltaX) > X_THRESHOLD) {
           this.scrollLeft += deltaX;
         } else {
@@ -30,4 +30,5 @@ export class EditorScroller extends Block {
   }
 }
 
-EditorScroller.template = /* HTML */ ` <slot></slot> `;
+// biome-ignore lint/style/noUnusedTemplateLiteral: This is HTML template
+EditorScroller.template = /* HTML */ `<slot></slot>`;

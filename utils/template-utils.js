@@ -19,11 +19,11 @@ const PLURAL_PREFIX = 'plural:';
  * @returns {String}
  */
 export function applyTemplateData(template, data, options = {}) {
-  let { openToken = OPEN_TOKEN, closeToken = CLOSE_TOKEN, transform = DEFAULT_TRANSFORMER } = options;
+  const { openToken = OPEN_TOKEN, closeToken = CLOSE_TOKEN, transform = DEFAULT_TRANSFORMER } = options;
 
-  for (let key in data) {
-    let value = data[key]?.toString();
-    template = template.replaceAll(openToken + key + closeToken, typeof value === 'string' ? transform(value) : value);
+  for (const key in data) {
+    const value = data[key]?.toString();
+    return template.replaceAll(openToken + key + closeToken, typeof value === 'string' ? transform(value) : value);
   }
   return template;
 }

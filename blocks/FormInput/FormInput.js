@@ -75,7 +75,7 @@ export class FormInput extends UploaderBlock {
 
           const fr = new DocumentFragment();
 
-          for (let value of cdnUrls) {
+          for (const value of cdnUrls) {
             const input = document.createElement('input');
             input.type = 'hidden';
             input.name = `${this.ctxName}[]`;

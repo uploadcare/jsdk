@@ -33,7 +33,7 @@ function validateCrop(crop) {
     return true;
   }
   /** @type {((arg: NonNullable<typeof crop>) => boolean)[]} */
-  let shouldMatch = [
+  const shouldMatch = [
     ({ dimensions, coords }) =>
       [...dimensions, ...coords].every((number) => Number.isInteger(number) && Number.isFinite(number)),
     ({ dimensions, coords }) => dimensions.every((d) => d > 0) && coords.every((c) => c >= 0),
@@ -95,21 +95,21 @@ export class EditorImageCropper extends Block {
 
   /** @private */
   _syncTransformations() {
-    let transformations = this.$['*editorTransformations'];
-    let pickedTransformations = pick(transformations, Object.keys(this.$['*operations']));
-    let operations = { ...this.$['*operations'], ...pickedTransformations };
+    const transformations = this.$['*editorTransformations'];
+    const pickedTransformations = pick(transformations, Object.keys(this.$['*operations']));
+    const operations = { ...this.$['*operations'], ...pickedTransformations };
     this.$['*operations'] = operations;
   }
 
   /** @private */
   _initCanvas() {
     /** @type {HTMLCanvasElement} */
-    let canvas = this.ref['canvas-el'];
-    let ctx = canvas.getContext('2d');
+    const canvas = this.ref['canvas-el'];
+    const ctx = canvas.getContext('2d');
 
-    let width = this.offsetWidth;
-    let height = this.offsetHeight;
-    let dpr = window.devicePixelRatio;
+    const width = this.offsetWidth;
+    const height = this.offsetHeight;
+    const dpr = window.devicePixelRatio;
     canvas.style.width = `${width}px`;
     canvas.style.height = `${height}px`;
     canvas.width = width * dpr;
@@ -126,36 +126,36 @@ export class EditorImageCropper extends Block {
       return;
     }
 
-    let image = this.$.image;
-    let padding = this.$['*padding'];
-    let operations = this.$['*operations'];
-    let { rotate } = operations;
+    const image = this.$.image;
+    const padding = this.$['*padding'];
+    const operations = this.$['*operations'];
+    const { rotate } = operations;
 
-    let bounds = { width: this.offsetWidth, height: this.offsetHeight };
-    let naturalSize = rotateSize({ width: image.naturalWidth, height: image.naturalHeight }, rotate);
+    const bounds = { width: this.offsetWidth, height: this.offsetHeight };
+    const naturalSize = rotateSize({ width: image.naturalWidth, height: image.naturalHeight }, rotate);
     let imageBox;
 
     if (naturalSize.width > bounds.width - padding * 2 || naturalSize.height > bounds.height - padding * 2) {
-      let imageAspectRatio = naturalSize.width / naturalSize.height;
-      let viewportAspectRatio = bounds.width / bounds.height;
+      const imageAspectRatio = naturalSize.width / naturalSize.height;
+      const viewportAspectRatio = bounds.width / bounds.height;
 
       if (imageAspectRatio > viewportAspectRatio) {
-        let width = bounds.width - padding * 2;
-        let height = width / imageAspectRatio;
-        let x = 0 + padding;
-        let y = padding + (bounds.height - padding * 2) / 2 - height / 2;
+        const width = bounds.width - padding * 2;
+        const height = width / imageAspectRatio;
+        const x = 0 + padding;
+        const y = padding + (bounds.height - padding * 2) / 2 - height / 2;
         imageBox = { x, y, width, height };
       } else {
-        let height = bounds.height - padding * 2;
-        let width = height * imageAspectRatio;
-        let x = padding + (bounds.width - padding * 2) / 2 - width / 2;
-        let y = 0 + padding;
+        const height = bounds.height - padding * 2;
+        const width = height * imageAspectRatio;
+        const x = padding + (bounds.width - padding * 2) / 2 - width / 2;
+        const y = 0 + padding;
         imageBox = { x, y, width, height };
       }
     } else {
-      let { width, height } = naturalSize;
-      let x = padding + (bounds.width - padding * 2) / 2 - width / 2;
-      let y = padding + (bounds.height - padding * 2) / 2 - height / 2;
+      const { width, height } = naturalSize;
+      const x = padding + (bounds.width - padding * 2) / 2 - width / 2;
+      const y = padding + (bounds.height - padding * 2) / 2 - height / 2;
       imageBox = { x, y, width, height };
     }
 
@@ -165,19 +165,19 @@ export class EditorImageCropper extends Block {
   /** @private */
   _alignCrop() {
     let cropBox = this.$['*cropBox'];
-    let imageBox = this.$['*imageBox'];
-    let operations = this.$['*operations'];
-    let { rotate } = operations;
-    let cropTransformation = this.$['*editorTransformations']['crop'];
-    let { width: previewWidth, x: previewX, y: previewY } = this.$['*imageBox'];
+    const imageBox = this.$['*imageBox'];
+    const operations = this.$['*operations'];
+    const { rotate } = operations;
+    const cropTransformation = this.$['*editorTransformations'].crop;
+    const { width: previewWidth, x: previewX, y: previewY } = this.$['*imageBox'];
 
     if (cropTransformation) {
-      let {
+      const {
         dimensions: [width, height],
         coords: [x, y],
       } = cropTransformation;
-      let { width: sourceWidth } = rotateSize(this._imageSize, rotate);
-      let ratio = previewWidth / sourceWidth;
+      const { width: sourceWidth } = rotateSize(this._imageSize, rotate);
+      const ratio = previewWidth / sourceWidth;
       cropBox = constraintRect(
         roundRect({
           x: previewX + x * ratio,
@@ -220,13 +220,13 @@ export class EditorImageCropper extends Block {
 
   /** @private */
   _drawImage() {
-    let ctx = this._ctx;
+    const ctx = this._ctx;
     if (!ctx) return;
-    let image = this.$.image;
-    let imageBox = this.$['*imageBox'];
-    let operations = this.$['*operations'];
-    let { mirror, flip, rotate } = operations;
-    let rotated = rotateSize({ width: imageBox.width, height: imageBox.height }, rotate);
+    const image = this.$.image;
+    const imageBox = this.$['*imageBox'];
+    const operations = this.$['*operations'];
+    const { mirror, flip, rotate } = operations;
+    const rotated = rotateSize({ width: imageBox.width, height: imageBox.height }, rotate);
     ctx.save();
     ctx.translate(imageBox.x + imageBox.width / 2, imageBox.y + imageBox.height / 2);
     ctx.rotate((rotate * Math.PI * -1) / 180);
@@ -240,8 +240,8 @@ export class EditorImageCropper extends Block {
     if (!this._isActive || !this.$.image || !this._canvas || !this._ctx) {
       return;
     }
-    let canvas = this._canvas;
-    let ctx = this._ctx;
+    const canvas = this._canvas;
+    const ctx = this._ctx;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -271,18 +271,18 @@ export class EditorImageCropper extends Block {
    * @returns {NonNullable<import('./types.js').Transformations['crop']>['dimensions']}
    */
   _getCropDimensions() {
-    let cropBox = this.$['*cropBox'];
-    let imageBox = this.$['*imageBox'];
-    let operations = this.$['*operations'];
-    let { rotate } = operations;
-    let { width: previewWidth, height: previewHeight } = imageBox;
-    let { width: sourceWidth, height: sourceHeight } = rotateSize(this._imageSize, rotate);
-    let { width: cropWidth, height: cropHeight } = cropBox;
-    let ratioW = previewWidth / sourceWidth;
-    let ratioH = previewHeight / sourceHeight;
+    const cropBox = this.$['*cropBox'];
+    const imageBox = this.$['*imageBox'];
+    const operations = this.$['*operations'];
+    const { rotate } = operations;
+    const { width: previewWidth, height: previewHeight } = imageBox;
+    const { width: sourceWidth, height: sourceHeight } = rotateSize(this._imageSize, rotate);
+    const { width: cropWidth, height: cropHeight } = cropBox;
+    const ratioW = previewWidth / sourceWidth;
+    const ratioH = previewHeight / sourceHeight;
 
     /** @type {[Number, Number]} */
-    let dimensions = [
+    const dimensions = [
       clamp(Math.round(cropWidth / ratioW), 1, sourceWidth),
       clamp(Math.round(cropHeight / ratioH), 1, sourceHeight),
     ];
@@ -295,18 +295,18 @@ export class EditorImageCropper extends Block {
    * @returns {import('./types.js').Transformations['crop']}
    */
   _getCropTransformation() {
-    let cropBox = this.$['*cropBox'];
-    let imageBox = this.$['*imageBox'];
-    let operations = this.$['*operations'];
-    let { rotate } = operations;
-    let { width: previewWidth, height: previewHeight, x: previewX, y: previewY } = imageBox;
-    let { width: sourceWidth, height: sourceHeight } = rotateSize(this._imageSize, rotate);
-    let { x: cropX, y: cropY } = cropBox;
-    let ratioW = previewWidth / sourceWidth;
-    let ratioH = previewHeight / sourceHeight;
+    const cropBox = this.$['*cropBox'];
+    const imageBox = this.$['*imageBox'];
+    const operations = this.$['*operations'];
+    const { rotate } = operations;
+    const { width: previewWidth, height: previewHeight, x: previewX, y: previewY } = imageBox;
+    const { width: sourceWidth, height: sourceHeight } = rotateSize(this._imageSize, rotate);
+    const { x: cropX, y: cropY } = cropBox;
+    const ratioW = previewWidth / sourceWidth;
+    const ratioH = previewHeight / sourceHeight;
 
-    let dimensions = this._getCropDimensions();
-    let crop = {
+    const dimensions = this._getCropDimensions();
+    const crop = {
       dimensions,
       coords: /** @type {[Number, Number]} */ ([
         clamp(Math.round((cropX - previewX) / ratioW), 0, sourceWidth - dimensions[0]),
@@ -331,12 +331,12 @@ export class EditorImageCropper extends Block {
     if (!this.isConnected || !this._imageSize) {
       return;
     }
-    let operations = this.$['*operations'];
-    let { rotate, mirror, flip } = operations;
-    let crop = this._getCropTransformation();
+    const operations = this.$['*operations'];
+    const { rotate, mirror, flip } = operations;
+    const crop = this._getCropTransformation();
     /** @type {import('./types.js').Transformations} */
-    let editorTransformations = this.$['*editorTransformations'];
-    let transformations = {
+    const editorTransformations = this.$['*editorTransformations'];
+    const transformations = {
       ...editorTransformations,
       crop,
       rotate,
@@ -425,12 +425,12 @@ export class EditorImageCropper extends Block {
 
   /** @private */
   _transitionToCrop() {
-    let dimensions = this._getCropDimensions();
-    let scaleX = Math.min(this.offsetWidth, dimensions[0]) / this.$['*cropBox'].width;
-    let scaleY = Math.min(this.offsetHeight, dimensions[1]) / this.$['*cropBox'].height;
-    let scale = Math.min(scaleX, scaleY);
-    let cropCenterX = this.$['*cropBox'].x + this.$['*cropBox'].width / 2;
-    let cropCenterY = this.$['*cropBox'].y + this.$['*cropBox'].height / 2;
+    const dimensions = this._getCropDimensions();
+    const scaleX = Math.min(this.offsetWidth, dimensions[0]) / this.$['*cropBox'].width;
+    const scaleY = Math.min(this.offsetHeight, dimensions[1]) / this.$['*cropBox'].height;
+    const scale = Math.min(scaleX, scaleY);
+    const cropCenterX = this.$['*cropBox'].x + this.$['*cropBox'].width / 2;
+    const cropCenterY = this.$['*cropBox'].y + this.$['*cropBox'].height / 2;
 
     this.style.transform = `scale(${scale}) translate(${(this.offsetWidth / 2 - cropCenterX) / scale}px, ${
       (this.offsetHeight / 2 - cropCenterY) / scale
@@ -440,10 +440,10 @@ export class EditorImageCropper extends Block {
 
   /** @private */
   _transitionToImage() {
-    let cropCenterX = this.$['*cropBox'].x + this.$['*cropBox'].width / 2;
-    let cropCenterY = this.$['*cropBox'].y + this.$['*cropBox'].height / 2;
+    const cropCenterX = this.$['*cropBox'].x + this.$['*cropBox'].width / 2;
+    const cropCenterY = this.$['*cropBox'].y + this.$['*cropBox'].height / 2;
 
-    this.style.transform = `scale(1)`;
+    this.style.transform = 'scale(1)';
     this.style.transformOrigin = `${cropCenterX}px ${cropCenterY}px`;
   }
 
@@ -462,21 +462,21 @@ export class EditorImageCropper extends Block {
    * @returns {Promise<HTMLImageElement>}
    */
   _waitForImage(originalUrl, transformations) {
-    let width = this.offsetWidth;
-    transformations = {
+    const width = this.offsetWidth;
+    const appendedTransformations = {
       ...transformations,
       crop: undefined,
       rotate: undefined,
       flip: undefined,
       mirror: undefined,
     };
-    let src = this.proxyUrl(viewerImageSrc(originalUrl, width, transformations));
-    let { promise, cancel, image } = preloadImage(src);
+    const src = this.proxyUrl(viewerImageSrc(originalUrl, width, appendedTransformations));
+    const { promise, cancel, image } = preloadImage(src);
 
-    let stop = this._handleImageLoading(src);
+    const stop = this._handleImageLoading(src);
     image.addEventListener('load', stop, { once: true });
     image.addEventListener('error', stop, { once: true });
-    this._cancelPreload && this._cancelPreload();
+    this._cancelPreload?.();
     this._cancelPreload = cancel;
 
     return promise
@@ -494,8 +494,8 @@ export class EditorImageCropper extends Block {
    * @returns {() => void} Destructor
    */
   _handleImageLoading(src) {
-    let operation = 'crop';
-    let loadingOperations = this.$['*loadingOperations'];
+    const operation = 'crop';
+    const loadingOperations = this.$['*loadingOperations'];
     if (!loadingOperations.get(operation)) {
       loadingOperations.set(operation, new Map());
     }

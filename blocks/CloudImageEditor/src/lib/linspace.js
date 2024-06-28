@@ -5,10 +5,10 @@
  * @returns {Number[]}
  */
 export function linspace(a, b, n) {
-  let ret = Array(n);
-  n--;
-  for (let i = n; i >= 0; i--) {
-    ret[i] = Math.ceil((i * b + (n - i) * a) / n);
+  const ret = Array(n);
+  const startN = n - 1;
+  for (let i = startN; i >= 0; i--) {
+    ret[i] = Math.ceil((i * b + (startN - i) * a) / startN);
   }
   return ret;
 }

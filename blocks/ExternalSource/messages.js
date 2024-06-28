@@ -1,4 +1,4 @@
-let cbMapping = {};
+const cbMapping = {};
 
 window.addEventListener('message', (e) => {
   let message;
@@ -9,8 +9,8 @@ window.addEventListener('message', (e) => {
   }
 
   if (message?.type in cbMapping) {
-    let cbList = cbMapping[message.type];
-    for (let [sender, callback] of cbList) {
+    const cbList = cbMapping[message.type];
+    for (const [sender, callback] of cbList) {
       if (e.source === sender) {
         callback(message);
       }
@@ -18,7 +18,7 @@ window.addEventListener('message', (e) => {
   }
 });
 
-const registerMessage = function (type, sender, callback) {
+const registerMessage = (type, sender, callback) => {
   if (!(type in cbMapping)) {
     cbMapping[type] = [];
   }
@@ -26,7 +26,7 @@ const registerMessage = function (type, sender, callback) {
   cbMapping[type].push([sender, callback]);
 };
 
-const unregisterMessage = function (type, sender) {
+const unregisterMessage = (type, sender) => {
   if (type in cbMapping) {
     cbMapping[type] = cbMapping[type].filter((item) => item[0] !== sender);
   }

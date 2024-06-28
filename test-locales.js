@@ -1,6 +1,6 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
 import { chromium } from 'playwright';
-import fs from 'fs/promises';
-import path from 'path';
 
 const REFERENCE_LOCALE = 'en';
 const SOCIAL_SOURCE_LANGS = ['de', 'en', 'es', 'fr', 'he', 'it', 'nl', 'pl', 'pt', 'ru', 'tr', 'uk', 'zh-TW', 'zh'];

@@ -12,14 +12,14 @@ import { debounce } from '../blocks/utils/debounce.js';
 import { customUserAgent } from '../blocks/utils/userAgent.js';
 import { createCdnUrl, createCdnUrlModifiers } from '../utils/cdn-utils.js';
 import { IMAGE_ACCEPT_LIST, fileIsImage, mergeFileTypes } from '../utils/fileTypes.js';
+import { parseCdnUrl } from '../utils/parseCdnUrl.js';
 import { stringToArray } from '../utils/stringToArray.js';
 import { uploaderBlockCtx } from './CTX.js';
+import { SecureUploadsManager } from './SecureUploadsManager.js';
 import { TypedCollection } from './TypedCollection.js';
+import { ValidationManager } from './ValidationManager.js';
 import { buildOutputCollectionState } from './buildOutputCollectionState.js';
 import { uploadEntrySchema } from './uploadEntrySchema.js';
-import { parseCdnUrl } from '../utils/parseCdnUrl.js';
-import { SecureUploadsManager } from './SecureUploadsManager.js';
-import { ValidationManager } from './ValidationManager.js';
 
 export class UploaderBlock extends ActivityBlock {
   couldBeCtxOwner = false;
@@ -40,7 +40,7 @@ export class UploaderBlock extends ActivityBlock {
     super.initCallback();
 
     if (!this.$['*uploadCollection']) {
-      let uploadCollection = new TypedCollection({
+      const uploadCollection = new TypedCollection({
         typedSchema: uploadEntrySchema,
         watchList: ['uploadProgress', 'uploadError', 'fileInfo', 'errors', 'cdnUrl', 'isUploading'],
       });
@@ -193,7 +193,9 @@ export class UploaderBlock extends ActivityBlock {
 
   /** @param {{ captureCamera?: boolean }} options */
   openSystemDialog(options = {}) {
-    let accept = serializeCsv(mergeFileTypes([this.cfg.accept ?? '', ...(this.cfg.imgOnly ? IMAGE_ACCEPT_LIST : [])]));
+    const accept = serializeCsv(
+      mergeFileTypes([this.cfg.accept ?? '', ...(this.cfg.imgOnly ? IMAGE_ACCEPT_LIST : [])]),
+    );
 
     if (this.cfg.accept && !!this.cfg.imgOnly) {
       console.warn(
@@ -214,14 +216,15 @@ export class UploaderBlock extends ActivityBlock {
     this.fileInput.dispatchEvent(new MouseEvent('click'));
     this.fileInput.onchange = () => {
       // @ts-ignore TODO: fix this
-      [...this.fileInput['files']].forEach((file) =>
-        this.addFileFromObject(file, { source: options.captureCamera ? UploadSource.CAMERA : UploadSource.LOCAL }),
-      );
+      for (const file of [...this.fileInput.files]) {
+        this.addFileFromObject(file, { source: options.captureCamera ? UploadSource.CAMERA : UploadSource.LOCAL });
+      }
+
       // To call uploadTrigger UploadList should draw file items first:
       this.$['*currentActivity'] = ActivityBlock.activities.UPLOAD_LIST;
       this.setOrAddState('*modalActive', true);
       // @ts-ignore TODO: fix this
-      this.fileInput['value'] = '';
+      this.fileInput.value = '';
       this.fileInput = null;
     };
   }
@@ -251,7 +254,7 @@ export class UploaderBlock extends ActivityBlock {
         // TODO: We should refactor those handlers
         if (srcKey === 'local') {
           this.$['*currentActivity'] = ActivityBlock.activities.UPLOAD_LIST;
-          this?.['openSystemDialog']();
+          this?.openSystemDialog();
           return;
         }
 
@@ -385,8 +388,7 @@ export class UploaderBlock extends ActivityBlock {
       ...new Set(
         Object.entries(changeMap)
           .filter(([key]) => ['uploadError', 'fileInfo'].includes(key))
-          .map(([, ids]) => [...ids])
-          .flat(),
+          .flatMap(([, ids]) => [...ids]),
       ),
     ];
 
@@ -424,10 +426,10 @@ export class UploaderBlock extends ActivityBlock {
       if (this.cfg.cropPreset) {
         this.setInitialCrop();
       }
-      let loadedItems = uploadCollection.findItems((entry) => {
+      const loadedItems = uploadCollection.findItems((entry) => {
         return !!entry.getValue('fileInfo');
       });
-      let errorItems = uploadCollection.findItems((entry) => {
+      const errorItems = uploadCollection.findItems((entry) => {
         return entry.getValue('errors').length > 0;
       });
       if (uploadCollection.size > 0 && errorItems.length === 0 && uploadCollection.size === loadedItems.length) {
@@ -454,9 +456,9 @@ export class UploaderBlock extends ActivityBlock {
       const uids = [...changeMap.cdnUrl].filter((uid) => {
         return !!this.uploadCollection.read(uid)?.getValue('cdnUrl');
       });
-      uids.forEach((uid) => {
+      for (const uid of uids) {
         this.emit(EventType.FILE_URL_CHANGED, this.getOutputItem(uid));
-      });
+      }
 
       this.$['*groupInfo'] = null;
     }
@@ -468,10 +470,10 @@ export class UploaderBlock extends ActivityBlock {
     /** @type {Set<string>} */
     const uploadTrigger = this.$['*uploadTrigger'];
     const items = [...uploadTrigger].filter((id) => !!this.uploadCollection.read(id));
-    items.forEach((id) => {
+    for (const id of items) {
       const uploadProgress = this.uploadCollection.readProp(id, 'uploadProgress');
       commonProgress += uploadProgress;
-    });
+    }
     const progress = items.length ? Math.round(commonProgress / items.length) : 0;
 
     if (this.$['*commonProgress'] === progress) {
@@ -545,7 +547,7 @@ export class UploaderBlock extends ActivityBlock {
     const secureUploadsManager = this.$['*secureUploadsManager'];
     const secureToken = await secureUploadsManager.getSecureToken().catch(() => null);
 
-    let options = {
+    const options = {
       store: this.cfg.store,
       publicKey: this.cfg.pubkey,
       baseCDN: this.cfg.cdnCname,
@@ -578,11 +580,11 @@ export class UploaderBlock extends ActivityBlock {
     const fileInfo = uploadEntryData.fileInfo;
 
     /** @type {import('../types').OutputFileEntry['status']} */
-    let status = uploadEntryData.isRemoved
+    const status = uploadEntryData.isRemoved
       ? 'removed'
       : uploadEntryData.errors.length > 0
         ? 'failed'
-        : !!uploadEntryData.fileInfo
+        : uploadEntryData.fileInfo
           ? 'success'
           : uploadEntryData.isUploading
             ? 'uploading'

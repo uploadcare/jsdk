@@ -3,8 +3,8 @@
  * @returns {string}
  */
 export function queryString(params) {
-  let list = [];
-  for (let [key, value] of Object.entries(params)) {
+  const list = [];
+  for (const [key, value] of Object.entries(params)) {
     if (value === undefined || value === null || (typeof value === 'string' && value.length === 0)) {
       continue;
     }

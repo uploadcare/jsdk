@@ -8,9 +8,9 @@ export const DropzoneState = {
   OVER: 3,
 };
 
-let RESET_EVENTS = ['focus'];
-let NEAR_OFFSET = 100;
-let nearnessRegistry = new Map();
+const RESET_EVENTS = ['focus'];
+const NEAR_OFFSET = 100;
+const nearnessRegistry = new Map();
 
 /**
  * @param {[x: number, y: number]} p
@@ -18,8 +18,8 @@ let nearnessRegistry = new Map();
  * @returns {number}
  */
 function distance(p, r) {
-  let cx = Math.max(Math.min(p[0], r.x + r.width), r.x);
-  let cy = Math.max(Math.min(p[1], r.y + r.height), r.y);
+  const cx = Math.max(Math.min(p[0], r.x + r.width), r.x);
+  const cy = Math.max(Math.min(p[1], r.y + r.height), r.y);
 
   return Math.sqrt((p[0] - cx) * (p[0] - cx) + (p[1] - cy) * (p[1] - cy));
 }
@@ -34,48 +34,50 @@ function distance(p, r) {
 export function addDropzone(desc) {
   let eventCounter = 0;
 
-  let body = document.body;
-  let switchHandlers = new Set();
-  let handleSwitch = (fn) => switchHandlers.add(fn);
+  const body = document.body;
+  const switchHandlers = new Set();
+  const handleSwitch = (fn) => switchHandlers.add(fn);
   let state = DropzoneState.INACTIVE;
 
-  let setState = (newState) => {
+  const setState = (newState) => {
     if (desc.shouldIgnore() && newState !== DropzoneState.INACTIVE) {
       return;
     }
     if (state !== newState) {
-      switchHandlers.forEach((fn) => fn(newState));
+      for (const fn of switchHandlers) {
+        fn(newState);
+      }
     }
     state = newState;
   };
 
-  let isDragging = () => eventCounter > 0;
+  const isDragging = () => eventCounter > 0;
 
   handleSwitch((newState) => desc.onChange(newState));
 
-  let onResetEvent = () => {
+  const onResetEvent = () => {
     eventCounter = 0;
     setState(DropzoneState.INACTIVE);
   };
-  let onDragEnter = () => {
+  const onDragEnter = () => {
     eventCounter += 1;
     if (state === DropzoneState.INACTIVE) {
       setState(DropzoneState.ACTIVE);
     }
   };
-  let onDragLeave = () => {
+  const onDragLeave = () => {
     eventCounter -= 1;
     if (!isDragging()) {
       setState(DropzoneState.INACTIVE);
     }
   };
-  let onDrop = (e) => {
+  const onDrop = (e) => {
     e.preventDefault();
     eventCounter = 0;
     setState(DropzoneState.INACTIVE);
   };
 
-  let onDragOver = (e) => {
+  const onDragOver = (e) => {
     if (desc.shouldIgnore()) {
       return;
     }
@@ -85,14 +87,14 @@ export function addDropzone(desc) {
     }
 
     /** @type {[Number, Number]} */
-    let dragPoint = [e.x, e.y];
-    let targetRect = desc.element.getBoundingClientRect();
-    let nearness = Math.floor(distance(dragPoint, targetRect));
-    let isNear = nearness < NEAR_OFFSET;
-    let isOver = e.composedPath().includes(desc.element);
+    const dragPoint = [e.x, e.y];
+    const targetRect = desc.element.getBoundingClientRect();
+    const nearness = Math.floor(distance(dragPoint, targetRect));
+    const isNear = nearness < NEAR_OFFSET;
+    const isOver = e.composedPath().includes(desc.element);
 
     nearnessRegistry.set(desc.element, nearness);
-    let isNearest = Math.min(...nearnessRegistry.values()) === nearness;
+    const isNearest = Math.min(...nearnessRegistry.values()) === nearness;
 
     if (isOver && isNearest) {
       e.preventDefault();
@@ -104,12 +106,12 @@ export function addDropzone(desc) {
     }
   };
 
-  let onElementDrop = async (e) => {
+  const onElementDrop = async (e) => {
     if (desc.shouldIgnore()) {
       return;
     }
     e.preventDefault();
-    let items = await getDropItems(e.dataTransfer);
+    const items = await getDropItems(e.dataTransfer);
     desc.onItems(items);
     setState(DropzoneState.INACTIVE);
   };
@@ -119,9 +121,9 @@ export function addDropzone(desc) {
   body.addEventListener('dragenter', onDragEnter);
   body.addEventListener('dragover', onDragOver);
   desc.element.addEventListener('drop', onElementDrop);
-  RESET_EVENTS.forEach((eventName) => {
+  for (const eventName of RESET_EVENTS) {
     window.addEventListener(eventName, onResetEvent);
-  });
+  }
 
   return () => {
     nearnessRegistry.delete(desc.element);
@@ -130,8 +132,8 @@ export function addDropzone(desc) {
     body.removeEventListener('dragenter', onDragEnter);
     body.removeEventListener('dragover', onDragOver);
     desc.element.removeEventListener('drop', onElementDrop);
-    RESET_EVENTS.forEach((eventName) => {
+    for (const eventName of RESET_EVENTS) {
       window.removeEventListener(eventName, onResetEvent);
-    });
+    }
   };
 }

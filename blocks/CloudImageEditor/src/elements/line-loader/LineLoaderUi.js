@@ -7,10 +7,10 @@ export class LineLoaderUi extends Block {
     this._active = false;
 
     this._handleTransitionEndRight = () => {
-      let lineEl = this.ref['line-el'];
-      lineEl.style.transition = `initial`;
+      const lineEl = this.ref['line-el'];
+      lineEl.style.transition = 'initial';
       lineEl.style.opacity = '0';
-      lineEl.style.transform = `translateX(-101%)`;
+      lineEl.style.transform = 'translateX(-101%)';
       this._active && this._start();
     };
   }
@@ -30,9 +30,9 @@ export class LineLoaderUi extends Block {
 
   _start() {
     this._active = true;
-    let { width } = this.getBoundingClientRect();
-    let lineEl = this.ref['line-el'];
-    lineEl.style.transition = `transform 1s`;
+    const { width } = this.getBoundingClientRect();
+    const lineEl = this.ref['line-el'];
+    lineEl.style.transition = 'transform 1s';
     lineEl.style.opacity = '1';
     lineEl.style.transform = `translateX(${width}px)`;
     lineEl.addEventListener('transitionend', this._handleTransitionEndRight, {

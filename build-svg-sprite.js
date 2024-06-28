@@ -1,7 +1,7 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
+import url from 'node:url';
 import SVGSpriter from 'svg-sprite';
-import url from 'url';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -50,7 +50,7 @@ const spriter = new SVGSpriter(config);
 
 console.log('Generating SVG sprite...');
 
-DATA.forEach((item) => {
+for (const item of DATA) {
   fs.readdir(item.input, (err, files) => {
     if (err) {
       throw err;
@@ -58,11 +58,11 @@ DATA.forEach((item) => {
 
     console.log(`Processing ${item.input}...`);
 
-    files.forEach((file) => {
+    for (const file of files) {
       const filePath = path.resolve(item.input, file);
       console.log(`Icon processed: ${filePath}`);
       spriter.add(filePath, null, fs.readFileSync(filePath, { encoding: 'utf-8' }));
-    });
+    }
 
     spriter.compile((error, result) => {
       if (error) {
@@ -74,4 +74,4 @@ DATA.forEach((item) => {
       fs.writeFileSync(item.output, jsTemplate);
     });
   });
-});
+}

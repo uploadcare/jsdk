@@ -1,4 +1,4 @@
-import { writeFileSync } from 'fs';
+import { writeFileSync } from 'node:fs';
 import { GlobalRegistrator } from '@happy-dom/global-registrator';
 import prettier from 'prettier';
 
@@ -22,16 +22,17 @@ const getClassStaticProperties = (klass) => {
     if (proto === HTMLElement || proto === HTMLElement.prototype) {
       return;
     }
-    Object.getOwnPropertyNames(proto)
-      .filter((name) => {
-        const isPublic = !name.startsWith('_');
-        const isOwn = !['arguments', 'prototype', 'caller', 'constructor', 'name', 'length'].includes(name);
-        const isDefined = isOwn && !!proto[name];
-        return isPublic && isOwn && isDefined;
-      })
-      .forEach((name) => {
+
+    for (const name of Object.getOwnPropertyNames(proto)) {
+      const isPublic = !name.startsWith('_');
+      const isOwn = !['arguments', 'prototype', 'caller', 'constructor', 'name', 'length'].includes(name);
+      const isDefined = isOwn && !!proto[name];
+
+      if (isPublic && isOwn && isDefined) {
         extractedProperties[name] = proto[name];
-      });
+      }
+    }
+
     extract(Object.getPrototypeOf(proto));
   };
   extract(klass);

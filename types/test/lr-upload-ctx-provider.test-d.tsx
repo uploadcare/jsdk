@@ -1,17 +1,17 @@
+import type { UploadcareFile, UploadcareGroup } from '@uploadcare/upload-client';
+import { useRef } from 'react';
 import { expectNotType, expectType } from 'tsd';
 import {
-  ActivityBlock,
-  EventMap,
-  OutputCollectionErrorType,
+  type ActivityBlock,
+  type EventMap,
+  type OutputCollectionErrorType,
   OutputCollectionState,
-  OutputCollectionStatus,
-  OutputError,
-  OutputFileEntry,
-  OutputFileErrorType,
+  type OutputCollectionStatus,
+  type OutputError,
+  type OutputFileEntry,
+  type OutputFileErrorType,
   UploadCtxProvider,
 } from '../../index.js';
-import { useRef } from 'react';
-import { UploadcareFile, UploadcareGroup } from '@uploadcare/upload-client';
 
 const instance = new UploadCtxProvider();
 
@@ -42,7 +42,7 @@ instance.addEventListener('change', (e) => {
     expectType<false>(state.isFailed);
     expectType<false>(state.isUploading);
     expectType<[]>(state.errors);
-    expectType<'success'>(state.allEntries[0].status)
+    expectType<'success'>(state.allEntries[0].status);
   } else if (state.isFailed) {
     expectType<'failed'>(state.status);
     expectType<false>(state.isSuccess);
@@ -61,7 +61,7 @@ instance.addEventListener('change', (e) => {
     expectType<false>(state.isFailed);
     expectType<false>(state.isUploading);
     expectType<[]>(state.errors);
-    expectType<'success' | 'idle'>(state.allEntries[0].status)
+    expectType<'success' | 'idle'>(state.allEntries[0].status);
   }
 });
 
@@ -209,5 +209,5 @@ instance.addEventListener('activity-change', (e) => {
 
 () => {
   const ref = useRef<InstanceType<UploadCtxProvider>>(null);
-  return <lr-upload-ctx-provider ctx-name="ctx" ref={ref}></lr-upload-ctx-provider>;
+  return <lr-upload-ctx-provider ctx-name="ctx" ref={ref} />;
 };

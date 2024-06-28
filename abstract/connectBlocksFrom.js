@@ -17,7 +17,7 @@ export async function connectBlocksFrom(url, register = false) {
       resolve(window[LR_WINDOW_KEY]);
       return;
     }
-    let script = document.createElement('script');
+    const script = document.createElement('script');
     script.async = true;
     script.src = url;
     script.onerror = () => {
@@ -25,7 +25,7 @@ export async function connectBlocksFrom(url, register = false) {
     };
     script.onload = () => {
       /** @type {import('../index.js')} */
-      let blocks = window[LR_WINDOW_KEY];
+      const blocks = window[LR_WINDOW_KEY];
       register && registerBlocks(blocks);
       resolve(blocks);
     };

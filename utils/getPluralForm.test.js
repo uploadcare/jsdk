@@ -1,5 +1,5 @@
-import { getPluralForm } from './getPluralForm';
 import { expect } from '@esm-bundle/chai';
+import { getPluralForm } from './getPluralForm';
 
 describe('getPluralForm', () => {
   it('should return selected form for es-US', () => {

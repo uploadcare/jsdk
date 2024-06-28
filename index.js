@@ -47,5 +47,4 @@ export { toKebabCase } from './utils/toKebabCase.js';
 
 export * from './env.js';
 
-// eslint-disable-next-line import/export
 export * from './types/index.js';

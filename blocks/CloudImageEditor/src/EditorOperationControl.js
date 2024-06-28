@@ -20,7 +20,7 @@ export class EditorOperationControl extends EditorButtonControl {
     this.defineAccessor('operation', (operation) => {
       if (operation) {
         this._operation = operation;
-        this.$['icon'] = operation;
+        this.$.icon = operation;
         this.bindL10n('title', () => this.l10n(operation));
       }
     });
@@ -30,9 +30,9 @@ export class EditorOperationControl extends EditorButtonControl {
         return;
       }
 
-      let { zero } = COLOR_OPERATIONS_CONFIG[this._operation];
-      let value = editorTransformations[this._operation];
-      let isActive = typeof value !== 'undefined' ? value !== zero : false;
+      const { zero } = COLOR_OPERATIONS_CONFIG[this._operation];
+      const value = editorTransformations[this._operation];
+      const isActive = typeof value !== 'undefined' ? value !== zero : false;
       this.$.active = isActive;
     });
   }

@@ -55,7 +55,7 @@ export class CloudImageEditorActivity extends UploaderBlock {
     if (!this.entry) {
       return;
     }
-    let result = e.detail;
+    const result = e.detail;
     this.entry.setMultipleValues({
       cdnUrl: result.cdnUrl,
       cdnUrlModifiers: result.cdnUrlModifiers,

@@ -44,7 +44,7 @@ export const joinCdnOperations = (...operations) => {
  * @returns {String}
  */
 export const createCdnUrlModifiers = (...cdnOperations) => {
-  let joined = joinCdnOperations(...cdnOperations);
+  const joined = joinCdnOperations(...cdnOperations);
   return joined ? `-/${joined}/` : '';
 };
 
@@ -55,10 +55,10 @@ export const createCdnUrlModifiers = (...cdnOperations) => {
  * @returns {String}
  */
 export function extractFilename(cdnUrl) {
-  let url = new URL(cdnUrl);
-  let noOrigin = url.pathname + url.search + url.hash;
-  let urlFilenameIdx = noOrigin.lastIndexOf('http');
-  let plainFilenameIdx = noOrigin.lastIndexOf('/');
+  const url = new URL(cdnUrl);
+  const noOrigin = url.pathname + url.search + url.hash;
+  const urlFilenameIdx = noOrigin.lastIndexOf('http');
+  const plainFilenameIdx = noOrigin.lastIndexOf('/');
   let filename = '';
 
   if (urlFilenameIdx >= 0) {
@@ -77,8 +77,8 @@ export function extractFilename(cdnUrl) {
  * @returns {string}
  */
 export function extractUuid(cdnUrl) {
-  let url = new URL(cdnUrl);
-  let { pathname } = url;
+  const url = new URL(cdnUrl);
+  const { pathname } = url;
   const slashIndex = pathname.indexOf('/');
   const secondSlashIndex = pathname.indexOf('/', slashIndex + 1);
   return pathname.substring(slashIndex + 1, secondSlashIndex);
@@ -91,13 +91,13 @@ export function extractUuid(cdnUrl) {
  * @returns {string}
  */
 export function extractCdnUrlModifiers(cdnUrl) {
-  let withoutFilename = trimFilename(cdnUrl);
-  let url = new URL(withoutFilename);
-  let operationsMarker = url.pathname.indexOf('/-/');
+  const withoutFilename = trimFilename(cdnUrl);
+  const url = new URL(withoutFilename);
+  const operationsMarker = url.pathname.indexOf('/-/');
   if (operationsMarker === -1) {
     return '';
   }
-  let operationsStr = url.pathname.substring(operationsMarker).slice(1);
+  const operationsStr = url.pathname.substring(operationsMarker).slice(1);
 
   return operationsStr;
 }
@@ -109,7 +109,7 @@ export function extractCdnUrlModifiers(cdnUrl) {
  * @returns {string[]}
  */
 export function extractOperations(cdnUrl) {
-  let operationsStr = extractCdnUrlModifiers(cdnUrl);
+  const operationsStr = extractCdnUrlModifiers(cdnUrl);
 
   return operationsStr
     .split('/-/')
@@ -124,9 +124,9 @@ export function extractOperations(cdnUrl) {
  * @returns {String}
  */
 export function trimFilename(cdnUrl) {
-  let url = new URL(cdnUrl);
-  let filename = extractFilename(cdnUrl);
-  let filenamePathPart = isFileUrl(filename) ? splitFileUrl(filename).pathname : filename;
+  const url = new URL(cdnUrl);
+  const filename = extractFilename(cdnUrl);
+  const filenamePathPart = isFileUrl(filename) ? splitFileUrl(filename).pathname : filename;
 
   url.pathname = url.pathname.replace(filenamePathPart, '');
   url.search = '';
@@ -151,7 +151,7 @@ export function isFileUrl(filename) {
  * @returns {{ pathname: String; search: String; hash: String }}
  */
 export function splitFileUrl(fileUrl) {
-  let url = new URL(fileUrl);
+  const url = new URL(fileUrl);
   return {
     pathname: url.origin + url.pathname || '',
     search: url.search || '',
@@ -170,19 +170,19 @@ export function splitFileUrl(fileUrl) {
 
 // TODO eadidenko replace arg to pass the object parameter
 export const createCdnUrl = (baseCdnUrl, cdnModifiers, filename) => {
-  let url = new URL(trimFilename(baseCdnUrl));
-  filename = filename || extractFilename(baseCdnUrl);
+  const url = new URL(trimFilename(baseCdnUrl));
+  const normalizedFilename = filename || extractFilename(baseCdnUrl);
   // TODO: fix double slash pathname bug (--cfg-cdn-cname: 'https://ucarecdn.com/' - trailing slash case)
   if (url.pathname.startsWith('//')) {
     url.pathname = url.pathname.replace('//', '/');
   }
-  if (isFileUrl(filename)) {
-    let splitted = splitFileUrl(filename);
+  if (isFileUrl(normalizedFilename)) {
+    const splitted = splitFileUrl(normalizedFilename);
     url.pathname = url.pathname + (cdnModifiers || '') + (splitted.pathname || '');
     url.search = splitted.search;
     url.hash = splitted.hash;
   } else {
-    url.pathname = url.pathname + (cdnModifiers || '') + (filename || '');
+    url.pathname = url.pathname + (cdnModifiers || '') + (normalizedFilename || '');
   }
   return url.toString();
 };
@@ -195,7 +195,7 @@ export const createCdnUrl = (baseCdnUrl, cdnModifiers, filename) => {
  * @returns {String}
  */
 export const createOriginalUrl = (cdnUrl, uuid) => {
-  let url = new URL(cdnUrl);
-  url.pathname = uuid + '/';
+  const url = new URL(cdnUrl);
+  url.pathname = `${uuid}/`;
   return url.toString();
 };

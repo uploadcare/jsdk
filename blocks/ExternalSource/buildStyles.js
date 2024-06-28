@@ -9,9 +9,9 @@ const styleToCss = (style) => {
     const propertiesObj = style[selector];
     const propertiesStr = Object.keys(propertiesObj).reduce((acc, prop) => {
       const value = propertiesObj[prop];
-      return acc + `${prop}: ${value};`;
+      return `${acc}${prop}: ${value};`;
     }, '');
-    return acc + `${selector}{${propertiesStr}}`;
+    return `${acc}${selector}{${propertiesStr}}`;
   }, '');
   return css;
 };

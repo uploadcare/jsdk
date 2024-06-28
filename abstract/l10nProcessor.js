@@ -8,7 +8,7 @@ import { localeStateKey } from './LocaleManager.js';
  * @param {T} fnCtx
  */
 export function l10nProcessor(fr, fnCtx) {
-  [...fr.querySelectorAll('[l10n]')].forEach((el) => {
+  for (const el of fr.querySelectorAll('[l10n]')) {
     let key = el.getAttribute('l10n');
     if (!key) {
       return;
@@ -36,15 +36,12 @@ export function l10nProcessor(fr, fnCtx) {
         if (!fnCtx.l10nProcessorSubs.has(localCtxKey)) {
           fnCtx.l10nProcessorSubs.set(localCtxKey, new Set());
         }
-        const keySubs = fnCtx.l10nProcessorSubs.get(localCtxKey);
-        keySubs?.forEach(
-          /** @param {{ remove: () => void }} sub */
-          (sub) => {
-            sub.remove();
-            keySubs.delete(sub);
-            fnCtx.allSubs.delete(sub);
-          },
-        );
+        const keySubs = fnCtx.l10nProcessorSubs.get(localCtxKey) ?? new Set();
+        for (const sub of keySubs) {
+          sub.remove();
+          keySubs.delete(sub);
+          fnCtx.allSubs.delete(sub);
+        }
         // We don't need the leading * in the key because we use the key as a local context key relative to the global state
         const nodeStateKey = localeStateKey(mappedKey).replace('*', '');
         // If the key is not present in the node context, add it
@@ -76,5 +73,5 @@ export function l10nProcessor(fr, fnCtx) {
       }
     });
     el.removeAttribute('l10n');
-  });
+  }
 }

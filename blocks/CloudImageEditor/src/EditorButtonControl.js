@@ -1,5 +1,5 @@
-import { classNames } from './lib/classNames.js';
 import { Block } from '../../../abstract/Block.js';
+import { classNames } from './lib/classNames.js';
 
 export class EditorButtonControl extends Block {
   init$ = {
@@ -17,7 +17,7 @@ export class EditorButtonControl extends Block {
     this._iconEl = this.ref['icon-el'];
 
     this.sub('title', (title) => {
-      let titleEl = this._titleEl;
+      const titleEl = this._titleEl;
       if (titleEl) {
         this._titleEl.style.display = title ? 'block' : 'none';
       }

@@ -64,7 +64,7 @@ export class Modal extends Block {
       this.ref.dialog.addEventListener('mouseup', this._handleDialogMouseUp);
     } else {
       this.setAttribute('dialog-fallback', '');
-      let backdrop = document.createElement('div');
+      const backdrop = document.createElement('div');
       backdrop.className = 'backdrop';
       this.appendChild(backdrop);
       backdrop.addEventListener('click', this._handleBackdropClick);

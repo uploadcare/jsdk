@@ -1,5 +1,5 @@
-import { parseCdnUrl } from './parseCdnUrl';
 import { expect } from '@esm-bundle/chai';
+import { parseCdnUrl } from './parseCdnUrl';
 
 describe('parseCdnUrl', () => {
   it('should should work', () => {

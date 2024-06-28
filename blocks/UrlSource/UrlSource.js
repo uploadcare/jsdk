@@ -1,5 +1,5 @@
-import { UploaderBlock } from '../../abstract/UploaderBlock.js';
 import { ActivityBlock } from '../../abstract/ActivityBlock.js';
+import { UploaderBlock } from '../../abstract/UploaderBlock.js';
 import { UploadSource } from '../utils/UploadSource.js';
 
 export class UrlSource extends UploaderBlock {
@@ -12,7 +12,7 @@ export class UrlSource extends UploaderBlock {
     onUpload: (e) => {
       e.preventDefault();
 
-      let url = this.ref.input['value'];
+      const url = this.ref.input.value;
       this.addFileFromUrl(url, { source: UploadSource.URL_TAB });
       this.$['*currentActivity'] = ActivityBlock.activities.UPLOAD_LIST;
     },
@@ -20,7 +20,7 @@ export class UrlSource extends UploaderBlock {
       this.historyBack();
     },
     onInput: (e) => {
-      let value = /** @type {HTMLInputElement} */ (e.target).value;
+      const value = /** @type {HTMLInputElement} */ (e.target).value;
       this.set$({ importDisabled: !value });
     },
   };
@@ -29,7 +29,7 @@ export class UrlSource extends UploaderBlock {
     super.initCallback();
     this.registerActivity(this.activityType, {
       onActivate: () => {
-        this.ref.input['value'] = '';
+        this.ref.input.value = '';
         this.ref.input.focus();
       },
     });

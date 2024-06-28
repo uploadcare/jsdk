@@ -1,5 +1,5 @@
-import { parseShrink } from './parseShrink.js';
 import { expect } from '@esm-bundle/chai';
+import { parseShrink } from './parseShrink.js';
 
 describe('parseShrink', () => {
   it('should be false', () => {

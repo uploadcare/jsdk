@@ -4,10 +4,10 @@
  * @returns {{}}
  */
 export function pick(obj, keys) {
-  let result = {};
-  for (let key of keys) {
-    let value = obj[key];
-    if (obj.hasOwnProperty(key) || value !== undefined) {
+  const result = {};
+  for (const key of keys) {
+    const value = obj[key];
+    if (Object.hasOwn(obj, key) || value !== undefined) {
       result[key] = value;
     }
   }

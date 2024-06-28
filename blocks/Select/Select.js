@@ -12,7 +12,7 @@ export class Select extends Block {
       this.value = this.ref.select.value;
       this.$.currentText =
         this.$.options.find((opt) => {
-          return opt.value == this.value;
+          return opt.value === this.value;
         })?.text || '';
       this.dispatchEvent(new Event('change'));
     },
@@ -24,9 +24,11 @@ export class Select extends Block {
     this.sub('options', (/** @type {{ text: String; value: String }[]} */ options) => {
       this.$.currentText = options?.[0]?.text || '';
       let html = '';
-      options?.forEach((opt) => {
-        html += /* HTML */ `<option value="${opt.value}">${opt.text}</option>`;
-      });
+      if (options) {
+        for (const opt of options) {
+          html += /* HTML */ `<option value="${opt.value}">${opt.text}</option>`;
+        }
+      }
       this.$.selectHtml = html;
     });
   }

@@ -1,15 +1,15 @@
 import { TRANSPARENT_PIXEL_SRC } from '../../../../utils/transparentPixelSrc.js';
 
 export function preloadImage(src) {
-  let image = new Image();
+  const image = new Image();
 
-  let promise = new Promise((resolve, reject) => {
+  const promise = new Promise((resolve, reject) => {
     image.src = src;
     image.onload = resolve;
     image.onerror = reject;
   });
 
-  let cancel = () => {
+  const cancel = () => {
     if (image.naturalWidth === 0) {
       image.src = TRANSPARENT_PIXEL_SRC;
     }
@@ -19,19 +19,19 @@ export function preloadImage(src) {
 }
 
 export function batchPreloadImages(list) {
-  let preloaders = [];
+  const preloaders = [];
 
-  for (let src of list) {
-    let preload = preloadImage(src);
+  for (const src of list) {
+    const preload = preloadImage(src);
     preloaders.push(preload);
   }
 
-  let images = preloaders.map((preload) => preload.image);
-  let promise = Promise.allSettled(preloaders.map((preload) => preload.promise));
-  let cancel = () => {
-    preloaders.forEach((preload) => {
+  const images = preloaders.map((preload) => preload.image);
+  const promise = Promise.allSettled(preloaders.map((preload) => preload.promise));
+  const cancel = () => {
+    for (const preload of preloaders) {
       preload.cancel();
-    });
+    }
   };
 
   return { promise, images, cancel };

@@ -1,5 +1,5 @@
-import { prettyBytes, ByteUnitEnum } from './prettyBytes';
 import { expect } from '@esm-bundle/chai';
+import { ByteUnitEnum, prettyBytes } from './prettyBytes';
 
 const EXPECTED_BASE = 1000;
 

@@ -23,12 +23,12 @@ function checkIsDirectory(file) {
     }
 
     try {
-      let reader = new FileReader();
+      const reader = new FileReader();
       reader.onerror = () => {
         resolve(true);
       };
       /** @param {Event} e */
-      let onLoad = (e) => {
+      const onLoad = (e) => {
         if (e.type !== 'loadend') {
           reader.abort();
         }
@@ -83,12 +83,12 @@ function readEntryContentAsync(webkitEntry, dataTransferItemType) {
     };
 
     /** @param {FileSystemDirectoryReader} reader */
-    let readReaderContent = (reader) => {
+    const readReaderContent = (reader) => {
       reading++;
 
       reader.readEntries((entries) => {
         reading--;
-        for (let entry of entries) {
+        for (const entry of entries) {
           readEntry(entry);
         }
 
@@ -113,14 +113,14 @@ export function getDropItems(dataTransfer) {
   const dropItems = [];
   const promises = [];
   for (let i = 0; i < dataTransfer.items.length; i++) {
-    let item = dataTransfer.items[i];
+    const item = dataTransfer.items[i];
     if (!item) {
       continue;
     }
     if (item.kind === 'file') {
       const itemType = item.type;
       if (typeof item.webkitGetAsEntry === 'function' || typeof (/** @type {any} */ (item).getAsEntry) === 'function') {
-        let entry =
+        const entry =
           typeof item.webkitGetAsEntry === 'function'
             ? item.webkitGetAsEntry()
             : /** @type {any} */ (item).getAsEntry();

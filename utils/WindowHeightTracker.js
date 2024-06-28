@@ -3,6 +3,7 @@ import { debounce } from '../blocks/utils/debounce.js';
 
 const WINDOW_HEIGHT_TRACKER_PROPERTY = '--uploadcare-blocks-window-height';
 
+// biome-ignore lint/complexity/noStaticOnlyClass: Let's keep it. Don't want to refactor it now.
 export class WindowHeightTracker {
   /**
    * @private
@@ -20,10 +21,10 @@ export class WindowHeightTracker {
    * @public
    */
   static registerClient(client) {
-    if (this.clientsRegistry.size === 0) {
-      this.attachTracker();
+    if (WindowHeightTracker.clientsRegistry.size === 0) {
+      WindowHeightTracker.attachTracker();
     }
-    this.clientsRegistry.add(client);
+    WindowHeightTracker.clientsRegistry.add(client);
   }
 
   /**
@@ -31,21 +32,21 @@ export class WindowHeightTracker {
    * @public
    */
   static unregisterClient(client) {
-    this.clientsRegistry.delete(client);
-    if (this.clientsRegistry.size === 0) {
-      this.detachTracker();
+    WindowHeightTracker.clientsRegistry.delete(client);
+    if (WindowHeightTracker.clientsRegistry.size === 0) {
+      WindowHeightTracker.detachTracker();
     }
   }
 
   /** @private */
   static attachTracker() {
-    window.addEventListener('resize', this.flush, { passive: true, capture: true });
-    this.flush();
+    window.addEventListener('resize', WindowHeightTracker.flush, { passive: true, capture: true });
+    WindowHeightTracker.flush();
   }
 
   /** @private */
   static detachTracker() {
-    window.removeEventListener('resize', this.flush, { capture: true });
+    window.removeEventListener('resize', WindowHeightTracker.flush, { capture: true });
     document.documentElement.style.removeProperty(WINDOW_HEIGHT_TRACKER_PROPERTY);
   }
 }

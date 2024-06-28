@@ -1,5 +1,5 @@
 import { getUserAgent } from '@uploadcare/upload-client';
-import { PACKAGE_VERSION, PACKAGE_NAME } from '../../env.js';
+import { PACKAGE_NAME, PACKAGE_VERSION } from '../../env.js';
 
 /**
  * @param {import('@uploadcare/upload-client').CustomUserAgentOptions} options

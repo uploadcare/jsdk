@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { memoize } from './memoize.js';
 import { spy } from 'sinon';
+import { memoize } from './memoize.js';
 
 describe('memoize', () => {
   it('should cache result', () => {

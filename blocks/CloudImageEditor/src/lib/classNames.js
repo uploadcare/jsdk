@@ -5,7 +5,7 @@ function normalize(...args) {
       return result;
     }
 
-    for (let token of Object.keys(arg)) {
+    for (const token of Object.keys(arg)) {
       result[token] = arg[token];
     }
 
@@ -14,7 +14,7 @@ function normalize(...args) {
 }
 
 export function classNames(...args) {
-  let mapping = normalize(...args);
+  const mapping = normalize(...args);
   return Object.keys(mapping)
     .reduce((result, token) => {
       if (mapping[token]) {
@@ -27,8 +27,8 @@ export function classNames(...args) {
 }
 
 export function applyClassNames(element, ...args) {
-  let mapping = normalize(...args);
-  for (let token of Object.keys(mapping)) {
+  const mapping = normalize(...args);
+  for (const token of Object.keys(mapping)) {
     element.classList.toggle(token, mapping[token]);
   }
 }

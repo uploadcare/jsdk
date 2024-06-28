@@ -1,24 +1,19 @@
 // @ts-check
+import fs from 'node:fs';
+import path, { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import esbuild from 'esbuild';
-import fs from 'fs';
-import path, { dirname } from 'path';
-import { fileURLToPath } from 'url';
 import { buildItems } from './build-items.js';
 
-let __dirname = dirname(fileURLToPath(import.meta.url));
-let packageRootPath = __dirname;
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const packageRootPath = __dirname;
 
 function jsBanner() {
-  let license = fs.readFileSync(path.join(packageRootPath, './LICENSE')).toString();
-  return (
-    '/**\n' +
-    ' * @license\n' +
-    license
-      .split('\n')
-      .map((line) => ` * ${line}`)
-      .join('\n') +
-    '\n */'
-  );
+  const license = fs.readFileSync(path.join(packageRootPath, './LICENSE')).toString();
+  return `/**\n * @license\n${license
+    .split('\n')
+    .map((line) => ` * ${line}`)
+    .join('\n')}\n */`;
 }
 
 /** @param {import('./build-items.js').BuildItem} buildItem */
@@ -42,13 +37,13 @@ function build(buildItem) {
       if (!buildItem.minifyHtml) {
         return;
       }
-      let js = fs.readFileSync(buildItem.out).toString();
+      const js = fs.readFileSync(buildItem.out).toString();
       /** @param {string} str */
-      let checkIfHtml = (str) => {
+      const checkIfHtml = (str) => {
         return str.includes('<') && (str.includes('</') || str.includes('/>'));
       };
       /** @param {string} ch */
-      let processChunk = (ch) => {
+      const processChunk = (ch) => {
         if (checkIfHtml(ch)) {
           let htmlMin = ch.split('\n').join(' ');
           while (htmlMin.includes('  ')) {
@@ -59,7 +54,7 @@ function build(buildItem) {
         }
         return ch;
       };
-      let result = js
+      const result = js
         .split('`')
         .map((chunk) => processChunk(chunk))
         .join('`')
@@ -70,6 +65,6 @@ function build(buildItem) {
     });
 }
 
-for (let buildItem of buildItems) {
+for (const buildItem of buildItems) {
   build(buildItem);
 }

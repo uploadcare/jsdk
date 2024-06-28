@@ -45,9 +45,9 @@ export function initState(fnCtx) {
     'presence.viewerToolbar': true,
     // TODO: beware of wrong ctx in case of element re-creation:
     '*on.retryNetwork': () => {
-      let images = fnCtx.querySelectorAll('img');
-      for (let img of images) {
-        let originalSrc = img.src;
+      const images = fnCtx.querySelectorAll('img');
+      for (const img of images) {
+        const originalSrc = img.src;
         img.src = TRANSPARENT_PIXEL_SRC;
         img.src = originalSrc;
       }
@@ -58,12 +58,12 @@ export function initState(fnCtx) {
       if (!transformations) {
         return;
       }
-      let originalUrl = fnCtx.$['*originalUrl'];
-      let cdnUrlModifiers = createCdnUrlModifiers(transformationsToOperations(transformations), 'preview');
-      let cdnUrl = createCdnUrl(originalUrl, cdnUrlModifiers);
+      const originalUrl = fnCtx.$['*originalUrl'];
+      const cdnUrlModifiers = createCdnUrlModifiers(transformationsToOperations(transformations), 'preview');
+      const cdnUrl = createCdnUrl(originalUrl, cdnUrlModifiers);
 
       /** @type {import('./types.js').ApplyResult} */
-      let eventData = {
+      const eventData = {
         originalUrl,
         cdnUrlModifiers,
         cdnUrl,

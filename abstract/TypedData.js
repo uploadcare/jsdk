@@ -35,11 +35,11 @@ export class TypedData {
    * @param {any} value
    */
   setValue(prop, value) {
-    if (!this.__typedSchema.hasOwnProperty(prop)) {
+    if (!Object.hasOwn(this.__typedSchema, prop)) {
       console.warn(MSG_NAME + prop);
       return;
     }
-    let pDesc = this.__typedSchema[prop];
+    const pDesc = this.__typedSchema[prop];
     if (value?.constructor === pDesc.type || value instanceof pDesc.type || (pDesc.nullable && value === null)) {
       this.__data.pub(prop, value);
       return;
@@ -49,14 +49,14 @@ export class TypedData {
 
   /** @param {Object<string, any>} updObj */
   setMultipleValues(updObj) {
-    for (let prop in updObj) {
+    for (const prop in updObj) {
       this.setValue(prop, updObj[prop]);
     }
   }
 
   /** @param {String} prop */
   getValue(prop) {
-    if (!this.__typedSchema.hasOwnProperty(prop)) {
+    if (!Object.hasOwn(this.__typedSchema, prop)) {
       console.warn(MSG_NAME + prop);
       return undefined;
     }

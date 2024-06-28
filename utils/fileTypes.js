@@ -25,10 +25,7 @@ export const mergeFileTypes = (fileTypes) => {
   if (!fileTypes) {
     return [];
   }
-  return fileTypes
-    .filter((item) => typeof item === 'string')
-    .map((str) => stringToArray(str))
-    .flat();
+  return fileTypes.filter((item) => typeof item === 'string').flatMap((str) => stringToArray(str));
 };
 
 /**
@@ -39,8 +36,8 @@ export const mergeFileTypes = (fileTypes) => {
 export const matchMimeType = (mimeType, allowedFileTypes) => {
   return allowedFileTypes.some((type) => {
     if (type.endsWith('*')) {
-      type = type.replace('*', '');
-      return mimeType.startsWith(type);
+      const noWildcardType = type.replace('*', '');
+      return mimeType.startsWith(noWildcardType);
     }
 
     return mimeType === type;
@@ -67,7 +64,7 @@ export const matchExtension = (fileName, allowedFileTypes) => {
  * @returns {Boolean}
  */
 export const fileIsImage = (file) => {
-  let type = file?.type;
+  const type = file?.type;
   if (!type) {
     return false;
   }

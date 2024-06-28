@@ -1,8 +1,8 @@
 // @ts-check
 import { Block } from '../../abstract/Block.js';
-import { initialConfig } from './initialConfig.js';
 import { sharedConfigKey } from '../../abstract/sharedConfigKey.js';
 import { toKebabCase } from '../../utils/toKebabCase.js';
+import { initialConfig } from './initialConfig.js';
 import { normalizeConfigValue } from './normalizeConfigValue.js';
 
 const allConfigKeys = /** @type {(keyof import('../../types').ConfigType)[]} */ ([
@@ -30,7 +30,7 @@ export const complexConfigKeys = [
   'secureDeliveryProxyUrlResolver',
   'iconHrefResolver',
   'fileValidators',
-  'collectionValidators'
+  'collectionValidators',
 ];
 
 /** @type {(key: keyof import('../../types').ConfigType) => key is keyof import('../../types').ConfigComplexType} */
@@ -58,7 +58,7 @@ const attrStateMapping = /** @type {Record<keyof import('../../types').ConfigAtt
 });
 
 /** @param {string} key */
-const getLocalPropName = (key) => '__' + key;
+const getLocalPropName = (key) => `__${key}`;
 
 class ConfigClass extends Block {
   requireCtxName = true;
@@ -118,6 +118,7 @@ class ConfigClass extends Block {
    * @param {unknown} value
    */
   _setValue(key, value) {
+    // biome-ignore lint/complexity/noUselessThisAlias: <explanation>
     const anyThis = /** @type {typeof this & any} */ (this);
 
     const normalizedValue = normalizeConfigValue(key, value);
@@ -141,6 +142,7 @@ class ConfigClass extends Block {
    * @param {keyof import('../../types').ConfigType} key
    */
   _getValue(key) {
+    // biome-ignore lint/complexity/noUselessThisAlias: <explanation>
     const anyThis = /** @type {typeof this & any} */ (this);
     const localPropName = getLocalPropName(key);
     return anyThis[localPropName];
@@ -163,7 +165,7 @@ class ConfigClass extends Block {
           `[lr-config] Option "${key}" value is the same as the previous one but the reference is different`,
         );
         console.warn(
-          `[lr-config] You should avoid changing the reference of the object to prevent unnecessary calculations`,
+          '[lr-config] You should avoid changing the reference of the object to prevent unnecessary calculations',
         );
         console.warn(`[lr-config] "${key}" previous value:`, previousValue);
         console.warn(`[lr-config] "${key}" new value:`, nextValue);
@@ -173,6 +175,7 @@ class ConfigClass extends Block {
 
   initCallback() {
     super.initCallback();
+    // biome-ignore lint/complexity/noUselessThisAlias: <explanation>
     const anyThis = /** @type {typeof this & any} */ (this);
 
     // Subscribe to the state changes and update the local properties and attributes.
@@ -219,6 +222,7 @@ class ConfigClass extends Block {
   attributeChangedCallback(name, oldVal, newVal) {
     if (oldVal === newVal) return;
 
+    // biome-ignore lint/complexity/noUselessThisAlias: <explanation>
     const anyThis = /** @type {typeof this & any} */ (this);
     const key = attrKeyMapping[name];
     // attributeChangedCallback could be called before the initCallback

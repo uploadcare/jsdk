@@ -51,7 +51,7 @@ export class FileUploaderInline extends SolutionBlock {
     });
 
     this.sub('*history', () => {
-      this.$['couldCancel'] = this.couldHistoryBack || this.couldShowList;
+      this.$.couldCancel = this.couldHistoryBack || this.couldShowList;
     });
   }
 }

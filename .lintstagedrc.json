@@ -1,5 +1,5 @@
 {
-  "*.{js,cjs}": ["eslint --fix", "prettier --write", "git add"],
+  "*.{js,cjs}": ["biome check --write", "git add"],
   "*.css": ["stylelint --fix", "prettier --write --parser css", "git add"],
   "*.json": ["prettier --write --parser json", "git add"],
   "*.md": ["prettier --write --parser markdown", "git add"]

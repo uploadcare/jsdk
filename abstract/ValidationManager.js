@@ -1,12 +1,12 @@
 // @ts-check
 import { EventType } from '../blocks/UploadCtxProvider/EventEmitter.js';
+import { validateCollectionUploadError, validateMultiple } from '../utils/validators/collection/index.js';
 import {
-  validateIsImage,
   validateFileType,
+  validateIsImage,
   validateMaxSizeLimit,
   validateUploadError,
 } from '../utils/validators/file/index.js';
-import { validateMultiple, validateCollectionUploadError } from '../utils/validators/collection/index.js';
 
 /**
  * @typedef {(

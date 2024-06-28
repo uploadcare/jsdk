@@ -1,10 +1,10 @@
 import { BaseComponent, Data } from '@symbiotejs/symbiote';
-import { PROPS_MAP } from './props-map.js';
-import { CSS_PREF } from './configurations.js';
 import { PACKAGE_NAME, PACKAGE_VERSION } from '../../env.js';
+import { CSS_PREF } from './configurations.js';
+import { PROPS_MAP } from './props-map.js';
 
 const CSS_PROPS = Object.create(null);
-for (let prop in PROPS_MAP) {
+for (const prop in PROPS_MAP) {
   CSS_PROPS[CSS_PREF + prop] = PROPS_MAP[prop]?.default || '';
 }
 
@@ -21,7 +21,7 @@ export class ImgConfig extends BaseComponent {
 
   /** @param {Object<String, String | Number>} kvObj */
   set$$(kvObj) {
-    for (let key in kvObj) {
+    for (const key in kvObj) {
       this.$[CSS_PREF + key] = kvObj[key];
     }
   }
@@ -46,11 +46,11 @@ export class ImgConfig extends BaseComponent {
   }
 
   initAttributes(el) {
-    [...this.attributes].forEach((attr) => {
+    for (const attr of this.attributes) {
       if (!PROPS_MAP[attr.name]) {
         el.setAttribute(attr.name, attr.value);
       }
-    });
+    }
   }
 
   /**
@@ -58,18 +58,18 @@ export class ImgConfig extends BaseComponent {
    * @param {() => void} cbkFn
    */
   initIntersection(el, cbkFn) {
-    let opts = {
+    const opts = {
       root: null,
       rootMargin: '0px',
     };
     /** @private */
     this._isnObserver = new IntersectionObserver((entries) => {
-      entries.forEach((ent) => {
-        if (ent.isIntersecting) {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
           cbkFn();
           this._isnObserver.unobserve(el);
         }
-      });
+      }
     }, opts);
     this._isnObserver.observe(el);
     if (!this._observed) {
@@ -82,9 +82,9 @@ export class ImgConfig extends BaseComponent {
   destroyCallback() {
     super.destroyCallback();
     if (this._isnObserver) {
-      this._observed.forEach((el) => {
+      for (const el of this._observed) {
         this._isnObserver.unobserve(el);
-      });
+      }
       this._isnObserver = null;
     }
     Data.deleteCtx(this);

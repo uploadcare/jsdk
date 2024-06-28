@@ -8,7 +8,7 @@ export class Range extends BaseComponent {
     onChange: (e) => {
       e.preventDefault();
       e.stopPropagation();
-      this.$.value = parseFloat(this._range.value);
+      this.$.value = Number.parseFloat(this._range.value);
       this.dispatchEvent(new Event('change'));
     },
   };
@@ -17,14 +17,14 @@ export class Range extends BaseComponent {
     super.initCallback();
     /** @type {HTMLInputElement} */
     this._range = this.ref.range;
-    [...this.attributes].forEach((attr) => {
-      let exclude = ['style', 'ref'];
+    for (const attr of this.attributes) {
+      const exclude = ['style', 'ref'];
       if (!exclude.includes(attr.name)) {
         this.ref.range.setAttribute(attr.name, attr.value);
       }
-    });
+    }
     this.sub('value', (val) => {
-      let pcnt = (val / 100) * 100;
+      const pcnt = (val / 100) * 100;
       this.$.cssLeft = `${pcnt}%`;
     });
     this.defineAccessor('value', (val) => {

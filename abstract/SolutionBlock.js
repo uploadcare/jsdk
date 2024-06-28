@@ -14,10 +14,10 @@ export class SolutionBlock extends Block {
   }
 
   static set template(value) {
-    this._template = svgIconsSprite + value + /** HTML */ `<slot></slot>`;
+    SolutionBlock._template = /* HTML */ `${svgIconsSprite + value}<slot></slot>`;
   }
 
   static get template() {
-    return this._template;
+    return SolutionBlock._template;
   }
 }

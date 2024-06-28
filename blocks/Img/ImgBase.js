@@ -1,18 +1,18 @@
-import { applyTemplateData } from '../../utils/template-utils.js';
 import { createCdnUrl, createCdnUrlModifiers, createOriginalUrl } from '../../utils/cdn-utils.js';
 import { stringToArray } from '../../utils/stringToArray.js';
+import { applyTemplateData } from '../../utils/template-utils.js';
 import { uniqueArray } from '../../utils/uniqueArray.js';
-import { parseObjectToString } from './utils/parseObjectToString.js';
 import { ImgConfig } from './ImgConfig.js';
 import {
   DEV_MODE,
   HI_RES_K,
-  ULTRA_RES_K,
-  UNRESOLVED_ATTR,
+  ImgTypeEnum,
   MAX_WIDTH,
   MAX_WIDTH_JPG,
-  ImgTypeEnum,
+  ULTRA_RES_K,
+  UNRESOLVED_ATTR,
 } from './configurations.js';
+import { parseObjectToString } from './utils/parseObjectToString.js';
 
 export class ImgBase extends ImgConfig {
   _img = new Image();
@@ -23,9 +23,9 @@ export class ImgBase extends ImgConfig {
    * @param {String} src
    */
   _fmtAbs(src) {
-    let isRel = !src.includes('//');
+    const isRel = !src.includes('//');
     if (isRel && !DEV_MODE) {
-      src = new URL(src, document.baseURI).href;
+      return new URL(src, document.baseURI).href;
     }
     return src;
   }
@@ -39,16 +39,17 @@ export class ImgBase extends ImgConfig {
   _validateSize(size) {
     if (size?.trim() !== '') {
       // Extract numeric part
-      let numericPart = size.match(/\d+/)[0];
+      const numericPart = size.match(/\d+/)[0];
 
       // Extract alphabetic part
-      let alphabeticPart = size.match(/[a-zA-Z]+/)[0];
+      const alphabeticPart = size.match(/[a-zA-Z]+/)[0];
 
-      const bp = parseInt(numericPart, 10);
+      const bp = Number.parseInt(numericPart, 10);
 
       if (Number(bp) > MAX_WIDTH_JPG && this.hasFormatJPG) {
         return MAX_WIDTH_JPG + alphabeticPart;
-      } else if (Number(bp) > MAX_WIDTH && !this.hasFormatJPG) {
+      }
+      if (Number(bp) > MAX_WIDTH && !this.hasFormatJPG) {
         return MAX_WIDTH + alphabeticPart;
       }
     }
@@ -91,7 +92,7 @@ export class ImgBase extends ImgConfig {
       return this._proxyUrl(this.$$('src'));
     }
 
-    let cdnModifiers = this._getCdnModifiers(size, blur);
+    const cdnModifiers = this._getCdnModifiers(size, blur);
 
     if (this.$$('src').startsWith(this.$$('cdn-cname'))) {
       return createCdnUrl(this.$$('src'), cdnModifiers);
@@ -103,8 +104,8 @@ export class ImgBase extends ImgConfig {
         createCdnUrl(
           //
           createOriginalUrl(this.$$('cdn-cname'), this.$$('uuid')),
-          cdnModifiers
-        )
+          cdnModifiers,
+        ),
       );
     }
 
@@ -114,8 +115,8 @@ export class ImgBase extends ImgConfig {
         createCdnUrl(
           //
           createOriginalUrl(this.$$('cdn-cname'), this.$$('uuid')),
-          cdnModifiers
-        )
+          cdnModifiers,
+        ),
       );
     }
 
@@ -126,8 +127,8 @@ export class ImgBase extends ImgConfig {
           //
           this.$$('proxy-cname'),
           cdnModifiers,
-          this._fmtAbs(this.$$('src'))
-        )
+          this._fmtAbs(this.$$('src')),
+        ),
       );
     }
 
@@ -138,8 +139,8 @@ export class ImgBase extends ImgConfig {
           //
           `https://${this.$$('pubkey')}.ucr.io/`,
           cdnModifiers,
-          this._fmtAbs(this.$$('src'))
-        )
+          this._fmtAbs(this.$$('src')),
+        ),
       );
     }
   }
@@ -150,14 +151,14 @@ export class ImgBase extends ImgConfig {
    * @returns {String}
    */
   _proxyUrl(url) {
-    let previewProxy = this.$$('secure-delivery-proxy');
+    const previewProxy = this.$$('secure-delivery-proxy');
     if (!previewProxy) {
       return url;
     }
     return applyTemplateData(
       this.$$('secure-delivery-proxy'),
       { previewUrl: url },
-      { transform: (value) => window.encodeURIComponent(value) }
+      { transform: (value) => window.encodeURIComponent(value) },
     );
   }
 
@@ -167,27 +168,26 @@ export class ImgBase extends ImgConfig {
    * @param {Boolean} [wOnly]
    */
   _getElSize(el, k = 1, wOnly = true) {
-    let rect = el.getBoundingClientRect();
-    let w = k * Math.round(rect.width);
-    let h = wOnly ? '' : k * Math.round(rect.height);
+    const rect = el.getBoundingClientRect();
+    const w = k * Math.round(rect.width);
+    const h = wOnly ? '' : k * Math.round(rect.height);
 
     if (w || h) {
       return `${w ? w : ''}x${h ? h : ''}`;
-    } else {
-      return null;
     }
+    return null;
   }
 
   /** @param {HTMLImageElement} img */
   _setupEventProxy(img) {
     /** @param {Event} e */
-    let proxifyEvent = (e) => {
+    const proxifyEvent = (e) => {
       e.stopPropagation();
-      let event = new Event(e.type, e);
+      const event = new Event(e.type, e);
       this.dispatchEvent(event);
     };
-    let EVENTS = ['load', 'error'];
-    for (let event of EVENTS) {
+    const EVENTS = ['load', 'error'];
+    for (const event of EVENTS) {
       img.addEventListener(event, proxifyEvent);
     }
   }
@@ -224,10 +224,9 @@ export class ImgBase extends ImgConfig {
   get breakpoints() {
     if (this.$$('breakpoints')) {
       const list = stringToArray(this.$$('breakpoints'));
-      return uniqueArray(list.map((bp) => parseInt(bp, 10)));
-    } else {
-      return null;
+      return uniqueArray(list.map((bp) => Number.parseInt(bp, 10)));
     }
+    return null;
   }
 
   get hasFormatJPG() {
@@ -236,7 +235,7 @@ export class ImgBase extends ImgConfig {
 
   /** @param {HTMLElement} el */
   renderBg(el) {
-    let imgSet = new Set();
+    const imgSet = new Set();
 
     imgSet.add(`url("${this._getUrlBase(this._getElSize(el))}") 1x`);
     if (this.$$('hi-res-support')) {
@@ -247,30 +246,30 @@ export class ImgBase extends ImgConfig {
       imgSet.add(`url("${this._getUrlBase(this._getElSize(el, ULTRA_RES_K))}") ${ULTRA_RES_K}x`);
     }
 
-    let iSet = `image-set(${[...imgSet].join(', ')})`;
+    const iSet = `image-set(${[...imgSet].join(', ')})`;
     el.style.setProperty('background-image', iSet);
-    el.style.setProperty('background-image', '-webkit-' + iSet);
+    el.style.setProperty('background-image', `-webkit-${iSet}`);
   }
 
   getSrcset() {
-    let srcset = new Set();
+    const srcset = new Set();
     if (this.breakpoints) {
-      this.breakpoints.forEach((bp) => {
-        srcset.add(this._getUrlBase(bp + 'x') + ` ${this._validateSize(bp + 'w')}`);
+      for (const bp of this.breakpoints) {
+        srcset.add(`${this._getUrlBase(`${bp}x`)} ${this._validateSize(`${bp}w`)}`);
         if (this.$$('hi-res-support')) {
-          srcset.add(this._getUrlBase(bp * HI_RES_K + 'x') + ` ${this._validateSize(bp * HI_RES_K + 'w')}`);
+          srcset.add(`${this._getUrlBase(`${bp * HI_RES_K}x`)} ${this._validateSize(`${bp * HI_RES_K}w`)}`);
         }
         if (this.$$('ultra-res-support')) {
-          srcset.add(this._getUrlBase(bp * ULTRA_RES_K + 'x') + ` ${this._validateSize(bp * ULTRA_RES_K + 'w')}`);
+          srcset.add(`${this._getUrlBase(`${bp * ULTRA_RES_K}x`)} ${this._validateSize(`${bp * ULTRA_RES_K}w`)}`);
         }
-      });
+      }
     } else {
-      srcset.add(this._getUrlBase(this._getElSize(this.currentImg.img)) + ' 1x');
+      srcset.add(`${this._getUrlBase(this._getElSize(this.currentImg.img))} 1x`);
       if (this.$$('hi-res-support')) {
-        srcset.add(this._getUrlBase(this._getElSize(this.currentImg.img, 2)) + ' 2x');
+        srcset.add(`${this._getUrlBase(this._getElSize(this.currentImg.img, 2))} 2x`);
       }
       if (this.$$('ultra-res-support')) {
-        srcset.add(this._getUrlBase(this._getElSize(this.currentImg.img, 3)) + ' 3x');
+        srcset.add(`${this._getUrlBase(this._getElSize(this.currentImg.img, 3))} 3x`);
       }
     }
     return [...srcset].join();
@@ -285,7 +284,7 @@ export class ImgBase extends ImgConfig {
   }
 
   renderBackground() {
-    [...document.querySelectorAll(this.bgSelector)].forEach((el) => {
+    for (const el of document.querySelectorAll(this.bgSelector)) {
       if (this.$$('intersection')) {
         this.initIntersection(el, () => {
           this.renderBg(el);
@@ -293,7 +292,7 @@ export class ImgBase extends ImgConfig {
       } else {
         this.renderBg(el);
       }
-    });
+    }
   }
 
   _appendURL({ elNode, src, srcset }) {

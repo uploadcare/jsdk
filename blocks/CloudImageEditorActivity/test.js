@@ -1,5 +1,5 @@
-import { ifRef } from '../../utils/ifRef.js';
 import * as blocks from '../../index.js';
+import { ifRef } from '../../utils/ifRef.js';
 
 ifRef(() => {
   blocks.registerBlocks(blocks);
