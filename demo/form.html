@@ -11,7 +11,8 @@
   <script type="importmap">
     {
       "imports": {
-        "@symbiotejs/symbiote": "./node_modules/@symbiotejs/symbiote/build/symbiote.js",
+        "@symbiotejs/symbiote": "./node_modules/@symbiotejs/symbiote/core/index.js",
+"@symbiotejs/symbiote/core/slotProcessor.js": "./node_modules/@symbiotejs/symbiote/core/slotProcessor.js",
         "@uploadcare/upload-client": "./node_modules/@uploadcare/upload-client/dist/esm/index.browser.mjs",
         "@uploadcare/image-shrink": "./node_modules/@uploadcare/image-shrink/dist/esm/index.browser.mjs"
       }
@@ -30,16 +31,16 @@
   </script>
 </head>
 
-<uc-config ctx-name="my-uploader" pubkey="demopublickey" multiple-min="1" multiple-max="10" img-only group-output></uc-config>
-<uc-file-uploader-regular headless class="uc-light" ctx-name="my-uploader">
+<uc-config ctx="my-uploader" pubkey="demopublickey" multiple-min="1" multiple-max="10" img-only group-output></uc-config>
+<uc-file-uploader-regular headless class="uc-light" ctx="my-uploader">
   <uc-form-input
     style="position: absolute; bottom: 0px; left: 50%; pointer-events: none;"
-    ctx-name="my-uploader"
+    ctx="my-uploader"
   ></uc-form-input>
 </uc-file-uploader-regular>
 
 <form>
-  <uc-simple-btn ctx-name="my-uploader" uc-wgt-common class="uc-light"></uc-simple-btn>
+  <uc-simple-btn ctx="my-uploader" uc-wgt-common class="uc-light"></uc-simple-btn>
   <br />
   <br />
   <button type="submit">Submit</button>

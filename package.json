@@ -53,6 +53,7 @@
   "repository": "https://github.com/uploadcare/file-uploader/",
   "files": [
     "{abstract,blocks,solutions,web,utils,types,locales}/**/*.{js,css,d.ts,d.ts.map}",
+    "symbiote.js",
     "index.{js,d.ts,d.ts.map}",
     "index.ssr.{js,d.ts,d.ts.map}",
     "env.{js,d.ts,d.ts.map}",
@@ -99,12 +100,12 @@
     "@happy-dom/global-registrator": "^9.8.4",
     "@jam-do/jam-tools": "^0.0.4",
     "@total-typescript/ts-reset": "^0.5.1",
-    "@types/chai": "^4.3.4",
+    "@types/chai": "^4.3.17",
     "@types/mocha": "^10.0.1",
     "@types/node": "^18.15.11",
     "@types/react": "^18.2.34",
-    "@web/dev-server": "^0.1.38",
-    "@web/test-runner": "^0.15.3",
+    "@web/dev-server": "^0.4.6",
+    "@web/test-runner": "^0.18.2",
     "esbuild": "^0.19.9",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
@@ -128,15 +129,17 @@
     "stylelint-declaration-block-no-ignored-properties": "^2.7.0",
     "stylelint-order": "^6.0.3",
     "svg-sprite": "^2.0.4",
-    "tsd": "^0.29.0",
-    "typescript": "^5.2.2"
+    "tsd": "^0.31.1",
+    "typescript": "^5.5.4"
   },
   "author": "Uploadcare Inc.",
   "license": "MIT",
   "dependencies": {
-    "@symbiotejs/symbiote": "^1.11.7",
+    "@symbiotejs/symbiote": "^2.3.1",
+    "@types/sinon": "^17.0.3",
     "@uploadcare/image-shrink": "^6.14.1",
     "@uploadcare/upload-client": "^6.14.1",
+    "D": "^1.0.0",
     "keyux": "^0.7.1"
   }
 }

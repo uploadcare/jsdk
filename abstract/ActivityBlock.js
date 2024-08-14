@@ -54,6 +54,8 @@ export class ActivityBlock extends Block {
         this.setAttribute('activity', this.activityType);
       }
       this.sub('*currentActivity', (/** @type {String} */ val) => {
+        if (this.activityType === 'url') {
+        }
         if (this.activityType !== val && this[ACTIVE_PROP]) {
           this._deactivate();
         } else if (this.activityType === val && !this[ACTIVE_PROP]) {

@@ -11,7 +11,7 @@ export class EditorOperationControl extends EditorButtonControl {
   initCallback() {
     super.initCallback();
 
-    this.$['on.click'] = (e) => {
+    this.$['on.click'] = () => {
       this.$['*sliderEl'].setOperation(this._operation);
       this.$['*showSlider'] = true;
       this.$['*currentOperation'] = this._operation;

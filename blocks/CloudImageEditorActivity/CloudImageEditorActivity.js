@@ -1,4 +1,5 @@
 // @ts-check
+import { DICT } from '../../symbiote.js';
 import { ActivityBlock } from '../../abstract/ActivityBlock.js';
 import { UploaderBlock } from '../../abstract/UploaderBlock.js';
 import { CloudImageEditorBlock } from '../CloudImageEditor/index.js';
@@ -73,7 +74,7 @@ export class CloudImageEditorActivity extends UploaderBlock {
     const cropPreset = this.cfg.cropPreset;
     const tabs = this.cfg.cloudImageEditorTabs;
 
-    instance.setAttribute('ctx-name', this.ctxName);
+    instance.setAttribute(DICT.CTX_NAME_ATTR, this.ctxName);
     instance.setAttribute('cdn-url', cdnUrl);
 
     if (cropPreset) {

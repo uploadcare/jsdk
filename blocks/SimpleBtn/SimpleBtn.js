@@ -1,4 +1,5 @@
 // @ts-check
+import { html } from '../../symbiote.js';
 import { UploaderBlock } from '../../abstract/UploaderBlock.js';
 import { asBoolean } from '../Config/normalizeConfigValue.js';
 
@@ -37,7 +38,7 @@ export class SimpleBtn extends UploaderBlock {
   }
 }
 
-SimpleBtn.template = /* HTML */ `
+SimpleBtn.template = html`
   <uc-drop-area set="@disabled: !withDropZone">
     <button type="button" set="onclick: onClick">
       <uc-icon name="upload"></uc-icon>

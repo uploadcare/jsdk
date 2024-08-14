@@ -1,3 +1,4 @@
+import { html } from '../../../symbiote.js';
 import { classNames } from './lib/classNames.js';
 import { Block } from '../../../abstract/Block.js';
 
@@ -36,7 +37,7 @@ export class EditorButtonControl extends Block {
   }
 }
 
-EditorButtonControl.template = /* HTML */ `
+EditorButtonControl.template = html`
   <button type="button" role="option">
     <uc-icon set="@name: icon;"></uc-icon>
     <div class="uc-title" ref="title-el">{{title}}</div>

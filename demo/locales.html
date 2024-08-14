@@ -132,7 +132,7 @@
       const setMode = (mode) => {
         document.querySelector('#container').innerHTML = `
             <uc-file-uploader-${mode}
-      ctx-name="my-uploader"
+      ctx="my-uploader"
       css-src="./solutions/file-uploader/${mode}/index.css"
     ></uc-file-uploader-${mode}>
             `;
@@ -163,7 +163,7 @@
       setMode('regular');
     </script>
 
-    <uc-config ctx-name="my-uploader" pubkey="demopublickey"></uc-config>
+    <uc-config ctx="my-uploader" pubkey="demopublickey"></uc-config>
 
     <div id="container"></div>
     <div id="mode-radio"></div>

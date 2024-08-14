@@ -1,4 +1,4 @@
-import { Data, UID } from '@symbiotejs/symbiote';
+import { PubSub, UID } from '../symbiote.js';
 import { TypedData } from './TypedData.js';
 
 export class TypedCollection {
@@ -22,9 +22,9 @@ export class TypedCollection {
     this.__ctxId = options.ctxName || UID.generate();
     /**
      * @private
-     * @type {Data}
+     * @type {PubSub}
      */
-    this.__data = Data.registerCtx({}, this.__ctxId);
+    this.__data = PubSub.registerCtx({}, this.__ctxId);
     /**
      * @private
      * @type {string[]}
@@ -232,7 +232,7 @@ export class TypedCollection {
   }
 
   destroy() {
-    Data.deleteCtx(this.__ctxId);
+    PubSub.deleteCtx(this.__ctxId);
     this.__propertyObservers = null;
     this.__collectionObservers = null;
     for (let id in this.__subsMap) {

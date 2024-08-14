@@ -375,7 +375,7 @@ uc-editor-operation-control > button {
   height: var(--size-icon);
 }
 
-uc-editor-filter-control > uc-icon.uc-original-icon > svg {
+uc-editor-filter-control uc-icon.uc-original-icon > svg {
   width: 100%;
   height: 100%;
 }
@@ -448,7 +448,7 @@ uc-editor-filter-control > button .uc-preview {
   transition: var(--transition-duration-3);
 }
 
-uc-editor-filter-control > .uc-original-icon {
+uc-editor-filter-control .uc-original-icon {
   color: var(--color-effect);
   opacity: 0.3;
 }

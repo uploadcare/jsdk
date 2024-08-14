@@ -1,4 +1,5 @@
 // @ts-check
+import { html } from '../../symbiote.js';
 import { ActivityBlock } from '../../abstract/ActivityBlock.js';
 import { UploaderBlock } from '../../abstract/UploaderBlock.js';
 import { EventType } from '../UploadCtxProvider/EventEmitter.js';
@@ -14,8 +15,6 @@ import { throttle } from '../utils/throttle.js';
  */
 
 export class UploadList extends UploaderBlock {
-  // Context owner should have access to CSS l10n
-  // TODO: We need to move away l10n from CSS
   couldBeCtxOwner = true;
   historyTracked = true;
   activityType = ActivityBlock.activities.UPLOAD_LIST;
@@ -199,7 +198,7 @@ export class UploadList extends UploaderBlock {
   }
 }
 
-UploadList.template = /* HTML */ `
+UploadList.template = html`
   <uc-activity-header>
     <span class="uc-header-text">{{headerText}}</span>
     <button type="button" class="uc-mini-btn uc-close-btn" set="onclick: *closeModal">
@@ -211,7 +210,7 @@ UploadList.template = /* HTML */ `
     <slot name="empty"><span l10n="no-files"></span></slot>
   </div>
 
-  <div class="uc-files" repeat="*uploadList" repeat-item-tag="uc-file-item"></div>
+  <div class="uc-files" itemize="*uploadList" item-tag="uc-file-item"></div>
 
   <div class="uc-common-error" set="@hidden: !commonErrorMessage; textContent: commonErrorMessage;"></div>
 

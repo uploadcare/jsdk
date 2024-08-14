@@ -1,8 +1,9 @@
-import { UploaderBlock } from '../../abstract/UploaderBlock.js';
+import { html } from '../../symbiote.js';
 import { ActivityBlock } from '../../abstract/ActivityBlock.js';
+import { UploaderBlock } from '../../abstract/UploaderBlock.js';
+import { UploadSource } from '../utils/UploadSource.js';
 import { canUsePermissionsApi } from '../utils/abilities.js';
 import { debounce } from '../utils/debounce.js';
-import { UploadSource } from '../utils/UploadSource.js';
 
 export class CameraSource extends UploaderBlock {
   couldBeCtxOwner = true;
@@ -213,7 +214,7 @@ export class CameraSource extends UploaderBlock {
   }
 }
 
-CameraSource.template = /* HTML */ `
+CameraSource.template = html`
   <uc-activity-header>
     <button type="button" class="uc-mini-btn" set="onclick: *historyBack">
       <uc-icon name="back"></uc-icon>
@@ -224,7 +225,7 @@ CameraSource.template = /* HTML */ `
     </div>
     <uc-select
       class="uc-camera-select"
-      set="$.options: cameraSelectOptions; @hidden: cameraSelectHidden; onchange: onCameraSelectChange"
+      set="options: cameraSelectOptions; @hidden: cameraSelectHidden; onchange: onCameraSelectChange"
     >
     </uc-select>
     <button type="button" class="uc-mini-btn uc-close-btn" set="onclick: *closeModal">

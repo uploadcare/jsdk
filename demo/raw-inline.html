@@ -18,7 +18,8 @@
   <script type="importmap">
     {
       "imports": {
-        "@symbiotejs/symbiote": "./node_modules/@symbiotejs/symbiote/build/symbiote.js",
+        "@symbiotejs/symbiote": "./node_modules/@symbiotejs/symbiote/core/index.js",
+"@symbiotejs/symbiote/core/slotProcessor.js": "./node_modules/@symbiotejs/symbiote/core/slotProcessor.js",
         "@uploadcare/upload-client": "./node_modules/@uploadcare/upload-client/dist/esm/index.browser.mjs",
         "@uploadcare/image-shrink": "./node_modules/@uploadcare/image-shrink/dist/esm/index.browser.mjs",
         "keyux": "./node_modules/keyux/index.js"
@@ -34,10 +35,10 @@
 </head>
 
 <uc-file-uploader-inline
-  ctx-name="my-uploader"
+  ctx="my-uploader"
 ></uc-file-uploader-inline>
 <uc-config
-  ctx-name="my-uploader"
+  ctx="my-uploader"
   pubkey="demopublickey"
   crop-preset="1:1"
   cloudImageEditorTabs="crop"

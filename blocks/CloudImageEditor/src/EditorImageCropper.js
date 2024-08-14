@@ -1,5 +1,5 @@
 // @ts-check
-
+import { html } from '../../../symbiote.js';
 import { Block } from '../../../abstract/Block.js';
 import { debounce } from '../../utils/debounce.js';
 import { throttle } from '../../utils/throttle.js';
@@ -545,7 +545,7 @@ export class EditorImageCropper extends Block {
   }
 }
 
-EditorImageCropper.template = /* HTML */ `
+EditorImageCropper.template = html`
   <canvas class="uc-canvas" ref="canvas-el"></canvas>
   <uc-crop-frame ref="frame-el"></uc-crop-frame>
 `;

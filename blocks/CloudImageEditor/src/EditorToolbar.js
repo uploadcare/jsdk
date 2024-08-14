@@ -1,4 +1,5 @@
 // @ts-check
+import { html } from '../../../symbiote.js';
 import { debounce } from '../../utils/debounce.js';
 import { Block } from '../../../abstract/Block.js';
 import { EditorCropButtonControl } from './EditorCropButtonControl.js';
@@ -37,7 +38,7 @@ function renderTabToggle(id) {
 
 /** @param {String} id */
 function renderTabContent(id) {
-  return /* HTML */ `
+  return html`
     <uc-presence-toggle
       id="tab_${id}"
       class="uc-tab-content"
@@ -334,7 +335,7 @@ export class EditorToolbar extends Block {
     this.sub('*editorTransformations', (editorTransformations) => {
       let appliedFilter = editorTransformations?.filter?.name;
       if (this.$['*currentFilter'] !== appliedFilter) {
-        this.$['*currentFilter'] = appliedFilter;
+        this.$['*currentFilter'] = appliedFilter ?? null;
       }
     });
 
@@ -399,7 +400,7 @@ export class EditorToolbar extends Block {
   }
 }
 
-EditorToolbar.template = /* HTML */ `
+EditorToolbar.template = html`
   <uc-line-loader-ui set="active: showLoader"></uc-line-loader-ui>
   <div class="uc-info-tooltip_container">
     <div class="uc-info-tooltip_wrapper">

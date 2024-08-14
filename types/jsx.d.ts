@@ -8,9 +8,15 @@ type FileUploaderRegular = import('../index.js').FileUploaderRegular;
 type FileUploaderMinimal = import('../index.js').FileUploaderMinimal;
 type FormInput = import('../index.js').FormInput;
 type CloudImageEditorBlock = import('../index.js').CloudImageEditorBlock;
-type CtxAttributes = {
-  'ctx-name': string;
-};
+type CtxAttributes =
+  | {
+      ctx: string;
+      'ctx-name'?: never;
+    }
+  | {
+      ctx?: never;
+      'ctx-name': string;
+    };
 type CommonHtmlAttributes<T> = Partial<
   Pick<React.HTMLAttributes<T>, 'id' | 'children' | 'hidden'> & { class: React.HTMLAttributes<T>['className'] }
 >;

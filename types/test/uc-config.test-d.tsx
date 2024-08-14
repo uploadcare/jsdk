@@ -4,28 +4,28 @@ import '../jsx.js';
 import { OutputFileEntry, FuncCollectionValidator, FuncFileValidator } from '../index.js';
 
 // @ts-expect-error untyped props
-() => <uc-config ctx-name="1" something="wrong"></uc-config>;
+() => <uc-config ctx="1" something="wrong"></uc-config>;
 
-// @ts-expect-error missing ctx-name
+// @ts-expect-error missing ctx
 () => <uc-config></uc-config>;
 
-// allow common html attributes and required ctx-name
-() => <uc-config ctx-name="1" id="1" class="1" hidden></uc-config>;
+// allow common html attributes and required ctx
+() => <uc-config ctx="1" id="1" class="1" hidden></uc-config>;
 
 // allow key prop
-() => <uc-config ctx-name="1" key={1}></uc-config>;
+() => <uc-config ctx="1" key={1}></uc-config>;
 
 // allow useRef hook
 () => {
   const ref = React.useRef<InstanceType<Config> | null>(null);
   expectType<InstanceType<Config> | null>(ref.current);
-  <uc-config ctx-name="1" ref={ref}></uc-config>;
+  <uc-config ctx="1" ref={ref}></uc-config>;
 };
 
 // allow callback ref
 () => {
   <uc-config
-    ctx-name="1"
+    ctx="1"
     ref={(el) => {
       expectType<InstanceType<Config> | null>(el);
     }}
@@ -36,11 +36,11 @@ import { OutputFileEntry, FuncCollectionValidator, FuncFileValidator } from '../
 () => {
   const ref = React.createRef<InstanceType<Config>>();
   expectType<InstanceType<Config> | null>(ref.current);
-  <uc-config ctx-name="1" ref={ref}></uc-config>;
+  <uc-config ctx="1" ref={ref}></uc-config>;
 };
 
 // accept config attributes
-() => <uc-config ctx-name="1" multiple multipleMax={1} multipleMin={2} accept="str" />;
+() => <uc-config ctx="1" multiple multipleMax={1} multipleMin={2} accept="str" />;
 
 // allow to use DOM properties
 () => {

@@ -1,3 +1,4 @@
+import { html } from '../../../../../symbiote.js';
 import { Block } from '../../../../../abstract/Block.js';
 
 export class SliderUi extends Block {
@@ -166,7 +167,7 @@ export class SliderUi extends Block {
     this._observer?.disconnect();
   }
 }
-SliderUi.template = /* HTML */ `
+SliderUi.template = html`
   <div class="uc-steps" ref="steps-el"></div>
   <div ref="thumb-el" class="uc-thumb"></div>
   <input

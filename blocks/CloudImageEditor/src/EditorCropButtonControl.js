@@ -30,7 +30,7 @@ export class EditorCropButtonControl extends EditorButtonControl {
       this.$['icon'] = operation;
     });
 
-    this.$['on.click'] = (e) => {
+    this.$['on.click'] = () => {
       let prev = this.$['*cropperEl'].getValue(this._operation);
       let next = nextValue(this._operation, prev);
       this.$['*cropperEl'].setValue(this._operation, next);

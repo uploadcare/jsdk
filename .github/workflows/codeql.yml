@@ -31,8 +31,7 @@ jobs:
         with:
           languages: ${{ matrix.language }}
           queries: +security-and-quality
-          paths-ignore:
-            - '**/*.test-d.ts(x?)'
+          paths-ignore: "**/*.test-d.ts(x?)"
       - name: Autobuild
         uses: github/codeql-action/autobuild@v2
 

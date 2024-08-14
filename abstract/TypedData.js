@@ -1,4 +1,4 @@
-import { Data, UID } from '@symbiotejs/symbiote';
+import { PubSub, UID } from '../symbiote.js';
 
 const MSG_NAME = '[Typed State] Wrong property name: ';
 const MSG_TYPE = '[Typed State] Wrong property type: ';
@@ -20,9 +20,9 @@ export class TypedData {
     }, {});
     /**
      * @private
-     * @type {Data}
+     * @type {PubSub}
      */
-    this.__data = Data.registerCtx(this.__schema, this.__ctxId);
+    this.__data = PubSub.registerCtx(this.__schema, this.__ctxId);
   }
 
   /** @returns {String} */
@@ -72,6 +72,6 @@ export class TypedData {
   }
 
   remove() {
-    Data.deleteCtx(this.__ctxId);
+    PubSub.deleteCtx(this.__ctxId);
   }
 }

@@ -1,3 +1,4 @@
+import { html } from '../../symbiote.js';
 import { Block } from '../../abstract/Block.js';
 
 export class Select extends Block {
@@ -21,15 +22,19 @@ export class Select extends Block {
   initCallback() {
     super.initCallback();
 
-    this.sub('options', (/** @type {{ text: String; value: String }[]} */ options) => {
-      this.$.currentText = options?.[0]?.text || '';
-      let html = '';
-      options?.forEach((opt) => {
-        html += /* HTML */ `<option value="${opt.value}">${opt.text}</option>`;
-      });
-      this.$.selectHtml = html;
-    });
+    this.defineAccessor(
+      'options',
+      /** @param {{ text: String; value: String }[]} options */
+      (options) => {
+        this.$.currentText = options?.[0]?.text || '';
+        let htmlCode = '';
+        options?.forEach((opt) => {
+          htmlCode += html`<option value="${opt.value}">${opt.text}</option>`;
+        });
+        this.$.selectHtml = htmlCode;
+      },
+    );
   }
 }
 
-Select.template = /* HTML */ ` <select ref="select" set="innerHTML: selectHtml; onchange: onSelect"></select> `;
+Select.template = html` <select ref="select" set="innerHTML: selectHtml; onchange: onSelect"></select> `;

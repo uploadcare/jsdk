@@ -1,4 +1,5 @@
 // @ts-check
+import { html } from '../../symbiote.js';
 import { CancelError, uploadFile } from '@uploadcare/upload-client';
 import { shrinkFile } from '@uploadcare/image-shrink';
 import { ActivityBlock } from '../../abstract/ActivityBlock.js';
@@ -293,7 +294,7 @@ export class FileItem extends UploaderBlock {
       isFinished: state === FileItemState.FINISHED,
       progressVisible: state === FileItemState.UPLOADING,
       isEditable: this.cfg.useCloudImageEditor && this._entry?.getValue('isImage') && this._entry?.getValue('cdnUrl'),
-      errorText: this._entry.getValue('errors')?.[0]?.message,
+      errorText: this._entry.getValue('errors')?.[0]?.message ?? '',
     });
   }
 
@@ -422,7 +423,7 @@ export class FileItem extends UploaderBlock {
   }
 }
 
-FileItem.template = /* HTML */ `
+FileItem.template = html`
   <div class="uc-inner" set="@finished: isFinished; @uploading: isUploading; @failed: isFailed; @focused: isFocused">
     <div class="uc-thumb" set="style.backgroundImage: thumbUrl">
       <div class="uc-badge">

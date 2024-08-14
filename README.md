@@ -85,7 +85,7 @@ We use [JSDoc type annotations](https://www.typescriptlang.org/docs/handbook/int
   href="https://cdn.jsdelivr.net/npm/@uploadcare/file-uploader@1/web/uc-file-uploader-regular.min.css"
 />
 
-<uc-file-uploader-regular ctx-name="my-uploader"> </uc-file-uploader-regular>
+<uc-file-uploader-regular ctx="my-uploader"> </uc-file-uploader-regular>
 ```
 
 3. Configure Uploadcare File Uploader and add your personal public key to the project. Discover the instructions in the [following section](#configuration).
@@ -109,7 +109,7 @@ UC.defineComponents(UC);
   href="https://cdn.jsdelivr.net/npm/@uploadcare/file-uploader@1/web/uc-file-uploader-regular.min.css"
 />
 
-<uc-file-uploader-inline ctx-name="my-uploader"> </uc-file-uploader-inline>
+<uc-file-uploader-inline ctx="my-uploader"> </uc-file-uploader-inline>
 ```
 
 4. Configure Uploadcare File Uploader and add your personal public key to the project. Discover the instructions in the [following section](#configuration).
@@ -123,10 +123,10 @@ All configurations in Uploadcare File Uploader are managed from `uc-config` bloc
 3. Add a `uc-config` block to your markup and replace `YOUR_PUBLIC_KEY` with your own public key:
 
 ```html
-<uc-config ctx-name="my-uploader" pubkey="YOUR_PUBLIC_KEY"></uc-config>
+<uc-config ctx="my-uploader" pubkey="YOUR_PUBLIC_KEY"></uc-config>
 ```
 
-4. Make sure that your config block uses the same `ctx-name` attribute value as your solution block.
+4. Make sure that your config block uses the same `ctx` attribute value as your solution block.
 
 Discover more about Uploadcare File Uploader configuration in [our documentation](https://uploadcare.com/docs/file-uploader/configuration/?ref=github-readme).
 

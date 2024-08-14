@@ -1,5 +1,5 @@
 import { FormInput } from '../../index.js';
 
-() => <uc-form-input ctx-name="my-uploader" />;
+() => <uc-form-input ctx="my-uploader" />;
 
 const formInput = new FormInput();

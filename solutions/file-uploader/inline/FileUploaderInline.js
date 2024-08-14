@@ -1,4 +1,5 @@
 // @ts-check
+import { html } from '@symbiotejs/symbiote';
 import { ActivityBlock } from '../../../abstract/ActivityBlock.js';
 import { SolutionBlock } from '../../../abstract/SolutionBlock.js';
 
@@ -56,8 +57,7 @@ export class FileUploaderInline extends SolutionBlock {
   }
 }
 
-FileUploaderInline.template = /* HTML */ `
-  <uc-start-from>
+FileUploaderInline.template = html` <uc-start-from>
     <uc-drop-area with-icon clickable></uc-drop-area>
     <uc-source-list wrap></uc-source-list>
     <button
@@ -72,5 +72,4 @@ FileUploaderInline.template = /* HTML */ `
   <uc-camera-source></uc-camera-source>
   <uc-url-source></uc-url-source>
   <uc-external-source></uc-external-source>
-  <uc-cloud-image-editor-activity></uc-cloud-image-editor-activity>
-`;
+  <uc-cloud-image-editor-activity></uc-cloud-image-editor-activity>`;

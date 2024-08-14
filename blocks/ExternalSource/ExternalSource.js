@@ -1,6 +1,6 @@
 // @ts-check
 
-import { create } from '@symbiotejs/symbiote';
+import { create, html } from '../../symbiote.js';
 import { ActivityBlock } from '../../abstract/ActivityBlock.js';
 import { UploaderBlock } from '../../abstract/UploaderBlock.js';
 import { stringToArray } from '../../utils/stringToArray.js';
@@ -87,7 +87,7 @@ export class ExternalSource extends UploaderBlock {
         this.mountIframe();
       },
     });
-    this.sub('*currentActivityParams', (val) => {
+    this.sub('*currentActivityParams', () => {
       if (!this.isActivityActive) {
         return;
       }
@@ -238,7 +238,7 @@ export class ExternalSource extends UploaderBlock {
   }
 }
 
-ExternalSource.template = /* HTML */ `
+ExternalSource.template = html`
   <uc-activity-header>
     <button type="button" class="uc-mini-btn" set="onclick: *historyBack">
       <uc-icon name="back"></uc-icon>

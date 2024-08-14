@@ -1,14 +1,14 @@
 // @ts-check
 import { ActivityBlock } from './ActivityBlock.js';
 
-import { Data } from '@symbiotejs/symbiote';
+import { PubSub } from '../symbiote.js';
 import { EventType } from '../blocks/UploadCtxProvider/EventEmitter.js';
 import { UploadSource } from '../blocks/utils/UploadSource.js';
 import { serializeCsv } from '../blocks/utils/comma-separated.js';
 import { IMAGE_ACCEPT_LIST, fileIsImage, mergeFileTypes } from '../utils/fileTypes.js';
 import { parseCdnUrl } from '../utils/parseCdnUrl.js';
-import { buildOutputCollectionState } from './buildOutputCollectionState.js';
 import { stringToArray } from '../utils/stringToArray.js';
+import { buildOutputCollectionState } from './buildOutputCollectionState.js';
 
 export class UploaderPublicApi {
   /**
@@ -176,7 +176,7 @@ export class UploaderPublicApi {
    * @returns {import('../types/exported.js').OutputFileEntry<TStatus>}
    */
   getOutputItem = (entryId) => {
-    const uploadEntryData = /** @type {import('./uploadEntrySchema.js').UploadEntry} */ (Data.getCtx(entryId).store);
+    const uploadEntryData = /** @type {import('./uploadEntrySchema.js').UploadEntry} */ (PubSub.getCtx(entryId).store);
 
     /** @type {import('@uploadcare/upload-client').UploadcareFile?} */
     const fileInfo = uploadEntryData.fileInfo;

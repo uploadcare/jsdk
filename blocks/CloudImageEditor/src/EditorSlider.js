@@ -1,4 +1,5 @@
 import { Block } from '../../../abstract/Block.js';
+import { html } from '../../../symbiote.js';
 import { COLOR_OPERATIONS_CONFIG } from './toolbar-constants.js';
 
 const ControlType = {
@@ -110,7 +111,7 @@ export class EditorSlider extends Block {
   }
 }
 
-EditorSlider.template = /* HTML */ `
+EditorSlider.template = html`
   <uc-slider-ui
     ref="slider-el"
     set="disabled: disabled; min: min; max: max; defaultValue: defaultValue; zero: zero; onInput: on.input;"

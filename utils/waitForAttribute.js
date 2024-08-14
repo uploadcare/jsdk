@@ -1,19 +1,40 @@
 // @ts-check
 
+import { withResolvers } from './withResolvers.js';
+
 /**
+ * @template {string} T
+ * @typedef {{
+ *       success: true;
+ *       attribute: T;
+ *       value: string;
+ *     }
+ *   | {
+ *       success: false;
+ *       attribute: T;
+ *     }} ReturnType
+ */
+
+/**
+ * @template {string} T
  * @param {{
  *   element: HTMLElement;
- *   attribute: string;
- *   onSuccess: (value: string) => void;
- *   onTimeout: () => void;
+ *   attribute: T;
  *   timeout?: number;
  * }} options
+ * @returns {Promise<ReturnType<T>>}
  */
-export const waitForAttribute = ({ element, attribute, onSuccess, onTimeout, timeout = 300 }) => {
+export const waitForAttribute = async ({ element, attribute, timeout = 300 }) => {
+  const { promise, resolve } = /** @type {typeof withResolvers<ReturnType<T>>} */ (withResolvers)();
+
   const currentAttrValue = element.getAttribute(attribute);
   if (currentAttrValue !== null) {
-    onSuccess(currentAttrValue);
-    return;
+    resolve({
+      success: true,
+      value: currentAttrValue,
+      attribute,
+    });
+    return promise;
   }
 
   const observer = new MutationObserver((mutations) => {
@@ -28,7 +49,10 @@ export const waitForAttribute = ({ element, attribute, onSuccess, onTimeout, tim
 
   const timeoutId = setTimeout(() => {
     observer.disconnect();
-    onTimeout();
+    resolve({
+      success: false,
+      attribute,
+    });
   }, timeout);
 
   /** @param {MutationRecord} mutation */
@@ -37,7 +61,13 @@ export const waitForAttribute = ({ element, attribute, onSuccess, onTimeout, tim
     if (mutation.type === 'attributes' && mutation.attributeName === attribute && attrValue !== null) {
       clearTimeout(timeoutId);
       observer.disconnect();
-      onSuccess(attrValue);
+      resolve({
+        success: true,
+        value: attrValue,
+        attribute,
+      });
     }
   };
+
+  return promise;
 };

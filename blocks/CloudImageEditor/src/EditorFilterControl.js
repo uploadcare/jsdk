@@ -1,9 +1,10 @@
 // @ts-check
+import { html } from '../../../symbiote.js';
 import { createCdnUrl, createCdnUrlModifiers } from '../../../utils/cdn-utils.js';
 import { EditorButtonControl } from './EditorButtonControl.js';
 import { FAKE_ORIGINAL_FILTER } from './EditorSlider.js';
-import { COMMON_OPERATIONS, transformationsToOperations } from './lib/transformationUtils.js';
 import { preloadImage } from './lib/preloadImage.js';
+import { COMMON_OPERATIONS, transformationsToOperations } from './lib/transformationUtils.js';
 
 export class EditorFilterControl extends EditorButtonControl {
   constructor() {
@@ -15,7 +16,6 @@ export class EditorFilterControl extends EditorButtonControl {
       title: '',
       icon: '',
       isOriginal: false,
-      iconSize: '20',
       'on.click': null,
     };
   }
@@ -119,10 +119,6 @@ export class EditorFilterControl extends EditorButtonControl {
       this.$.active = currentFilter && currentFilter === this._filter;
     });
 
-    this.sub('isOriginal', (isOriginal) => {
-      this.$.iconSize = isOriginal ? 40 : 20;
-    });
-
     this.sub('active', (active) => {
       if (this.$.isOriginal) {
         return;
@@ -157,9 +153,9 @@ export class EditorFilterControl extends EditorButtonControl {
   }
 }
 
-EditorFilterControl.template = /* HTML */ `
+EditorFilterControl.template = html`
   <button type="button" role="option">
     <div class="uc-preview" ref="preview-el"></div>
-    <uc-icon ref="icon-el" set="@name: icon; @size: iconSize;"></uc-icon>
+    <uc-icon ref="icon-el" set="@name: icon;"></uc-icon>
   </button>
 `;

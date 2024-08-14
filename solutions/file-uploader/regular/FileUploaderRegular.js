@@ -1,4 +1,5 @@
 // @ts-check
+import { html } from '@symbiotejs/symbiote';
 import { SolutionBlock } from '../../../abstract/SolutionBlock.js';
 import { asBoolean } from '../../../blocks/Config/normalizeConfigValue.js';
 import { EventType } from '../../../blocks/UploadCtxProvider/EventEmitter.js';
@@ -40,7 +41,7 @@ export class FileUploaderRegular extends SolutionBlock {
   }
 }
 
-FileUploaderRegular.template = /* HTML */ `
+FileUploaderRegular.template = html`
   <uc-simple-btn set="@hidden: isHidden"></uc-simple-btn>
 
   <uc-modal strokes block-body-scrolling>

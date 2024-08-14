@@ -1,7 +1,8 @@
+import { html } from '../../../symbiote.js';
 import { TRANSPARENT_PIXEL_SRC } from '../../../utils/transparentPixelSrc.js';
 import svgIconsSprite from './svg-sprite.js';
 
-export const TEMPLATE = /* HTML */ `
+export const TEMPLATE = html`
   ${svgIconsSprite}
   <div class="uc-wrapper uc-wrapper_desktop">
     <uc-presence-toggle class="uc-network_problems_splash" set="visible: presence.networkProblems;">

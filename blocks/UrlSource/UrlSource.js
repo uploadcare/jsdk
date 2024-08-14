@@ -1,5 +1,6 @@
-import { UploaderBlock } from '../../abstract/UploaderBlock.js';
+import { html } from '../../symbiote.js';
 import { ActivityBlock } from '../../abstract/ActivityBlock.js';
+import { UploaderBlock } from '../../abstract/UploaderBlock.js';
 import { UploadSource } from '../utils/UploadSource.js';
 
 export class UrlSource extends UploaderBlock {
@@ -36,7 +37,7 @@ export class UrlSource extends UploaderBlock {
   }
 }
 
-UrlSource.template = /* HTML */ `
+UrlSource.template = html`
   <uc-activity-header>
     <button type="button" class="uc-mini-btn" set="onclick: *historyBack">
       <uc-icon name="back"></uc-icon>

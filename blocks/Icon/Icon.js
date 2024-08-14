@@ -1,4 +1,5 @@
 // @ts-check
+import { html } from '../../symbiote.js';
 import { Block } from '../../abstract/Block.js';
 
 export class Icon extends Block {
@@ -9,7 +10,6 @@ export class Icon extends Block {
       ...this.init$,
       name: '',
       href: '',
-      title: '',
     };
   }
 
@@ -31,14 +31,12 @@ export class Icon extends Block {
   }
 }
 
-Icon.template = /* HTML */ `
+Icon.template = html`
   <svg ref="svg" xmlns="http://www.w3.org/2000/svg">
-    <title>{{title}}</title>
     <use set="@href: href;"></use>
   </svg>
 `;
 
 Icon.bindAttributes({
   name: 'name',
-  title: 'title',
 });

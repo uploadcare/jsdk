@@ -1,3 +1,4 @@
+import { html } from '../../symbiote.js';
 import { Block } from '../../abstract/Block.js';
 
 export class ProgressBar extends Block {
@@ -35,4 +36,4 @@ export class ProgressBar extends Block {
   }
 }
 
-ProgressBar.template = /* HTML */ ` <div ref="line" class="uc-progress"></div> `;
+ProgressBar.template = html` <div ref="line" class="uc-progress"></div> `;

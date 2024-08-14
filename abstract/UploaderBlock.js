@@ -1,7 +1,7 @@
 // @ts-check
 import { ActivityBlock } from './ActivityBlock.js';
 
-import { Data } from '@symbiotejs/symbiote';
+import { PubSub } from '../symbiote.js';
 import { uploadFileGroup } from '@uploadcare/upload-client';
 import { calculateMaxCenteredCropFrame } from '../blocks/CloudImageEditor/src/crop-utils.js';
 import { parseCropPreset } from '../blocks/CloudImageEditor/src/lib/parseCropPreset.js';
@@ -234,7 +234,7 @@ export class UploaderBlock extends ActivityBlock {
 
     if (changeMap.uploadProgress) {
       for (const entryId of changeMap.uploadProgress) {
-        const { isUploading, silent } = Data.getCtx(entryId).store;
+        const { isUploading, silent } = PubSub.getCtx(entryId).store;
         if (isUploading && !silent) {
           this.emit(EventType.FILE_UPLOAD_PROGRESS, this.api.getOutputItem(entryId));
         }
@@ -244,7 +244,7 @@ export class UploaderBlock extends ActivityBlock {
     }
     if (changeMap.isUploading) {
       for (const entryId of changeMap.isUploading) {
-        const { isUploading, silent } = Data.getCtx(entryId).store;
+        const { isUploading, silent } = PubSub.getCtx(entryId).store;
         if (isUploading && !silent) {
           this.emit(EventType.FILE_UPLOAD_START, this.api.getOutputItem(entryId));
         }
@@ -252,7 +252,7 @@ export class UploaderBlock extends ActivityBlock {
     }
     if (changeMap.fileInfo) {
       for (const entryId of changeMap.fileInfo) {
-        const { fileInfo, silent } = Data.getCtx(entryId).store;
+        const { fileInfo, silent } = PubSub.getCtx(entryId).store;
         if (fileInfo && !silent) {
           this.emit(EventType.FILE_UPLOAD_SUCCESS, this.api.getOutputItem(entryId));
         }
@@ -263,7 +263,7 @@ export class UploaderBlock extends ActivityBlock {
     }
     if (changeMap.errors) {
       for (const entryId of changeMap.errors) {
-        const { errors } = Data.getCtx(entryId).store;
+        const { errors } = PubSub.getCtx(entryId).store;
         if (errors.length > 0) {
           this.emit(EventType.FILE_UPLOAD_FAILED, this.api.getOutputItem(entryId));
           this.emit(

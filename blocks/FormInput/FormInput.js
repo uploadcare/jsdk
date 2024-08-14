@@ -1,5 +1,5 @@
 // @ts-check
-import { applyStyles } from '@symbiotejs/symbiote';
+import { applyStyles } from '../../symbiote.js';
 import { UploaderBlock } from '../../abstract/UploaderBlock.js';
 
 export class FormInput extends UploaderBlock {

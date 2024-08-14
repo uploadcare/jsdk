@@ -1,3 +1,4 @@
+import { html } from '../../../../../symbiote.js';
 import { Block } from '../../../../../abstract/Block.js';
 import { classNames } from '../../lib/classNames.js';
 
@@ -52,7 +53,7 @@ export class BtnUi extends Block {
       }
     });
 
-    this.sub('text', (txt) => {
+    this.sub('text', () => {
       this._iconSingle = false;
     });
 
@@ -79,10 +80,9 @@ export class BtnUi extends Block {
     }
   }
 }
-
 BtnUi.bindAttributes({ text: 'text', icon: 'icon', reverse: 'reverse', theme: 'theme' });
 
-BtnUi.template = /* HTML */ `
+BtnUi.template = html`
   <button type="button" set="@role:aria-role; @aria-controls: aria-controls">
     <uc-icon set="className: iconCss; @name: icon; @hidden: !icon"></uc-icon>
     <div class="uc-text">{{text}}</div>

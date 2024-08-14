@@ -103,8 +103,8 @@ export class ImgBase extends ImgConfig {
         createCdnUrl(
           //
           createOriginalUrl(this.$$('cdn-cname'), this.$$('uuid')),
-          cdnModifiers
-        )
+          cdnModifiers,
+        ),
       );
     }
 
@@ -114,8 +114,8 @@ export class ImgBase extends ImgConfig {
         createCdnUrl(
           //
           createOriginalUrl(this.$$('cdn-cname'), this.$$('uuid')),
-          cdnModifiers
-        )
+          cdnModifiers,
+        ),
       );
     }
 
@@ -126,8 +126,8 @@ export class ImgBase extends ImgConfig {
           //
           this.$$('proxy-cname'),
           cdnModifiers,
-          this._fmtAbs(this.$$('src'))
-        )
+          this._fmtAbs(this.$$('src')),
+        ),
       );
     }
 
@@ -138,8 +138,8 @@ export class ImgBase extends ImgConfig {
           //
           `https://${this.$$('pubkey')}.ucr.io/`,
           cdnModifiers,
-          this._fmtAbs(this.$$('src'))
-        )
+          this._fmtAbs(this.$$('src')),
+        ),
       );
     }
   }
@@ -157,7 +157,7 @@ export class ImgBase extends ImgConfig {
     return applyTemplateData(
       this.$$('secure-delivery-proxy'),
       { previewUrl: url },
-      { transform: (value) => window.encodeURIComponent(value) }
+      { transform: (value) => window.encodeURIComponent(value) },
     );
   }
 

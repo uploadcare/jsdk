@@ -1,3 +1,4 @@
+import { html } from '../../symbiote.js';
 import { ActivityBlock } from '../../abstract/ActivityBlock.js';
 
 export class StartFrom extends ActivityBlock {
@@ -11,4 +12,4 @@ export class StartFrom extends ActivityBlock {
   }
 }
 
-StartFrom.template = /* HTML */ ` <div class="uc-content"><slot></slot></div> `;
+StartFrom.template = html` <div class="uc-content"><slot></slot></div> `;
