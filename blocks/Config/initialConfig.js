@@ -72,4 +72,5 @@ export const initialConfig = {
   enableVideoRecording: true,
   maxVideoRecordingDuration: null,
   mediaRecorerOptions: null,
+  aspectRatio: null,
 };

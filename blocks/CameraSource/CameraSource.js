@@ -633,15 +633,15 @@ export class CameraSource extends UploaderBlock {
 
   _capture = async () => {
     const constraints = {
-      video: DEFAULT_VIDEO_CONFIG,
+      video: {
+        aspectRatio: this.cfg.aspectRatio,
+      },
       audio: this.cfg.enableAudioRecording ? {} : false,
     };
 
     if (this._selectedCameraId) {
-      constraints.video = {
-        deviceId: {
-          exact: this._selectedCameraId,
-        },
+      constraints.video.deviceId = {
+        exact: this._selectedCameraId,
       };
     }
 

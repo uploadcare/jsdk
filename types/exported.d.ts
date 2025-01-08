@@ -76,6 +76,11 @@ export type ConfigType = {
   secureDeliveryProxyUrlResolver: SecureDeliveryProxyUrlResolver | null;
   iconHrefResolver: IconHrefResolver | null;
 
+  /**
+   * The aspect ratio of the image/video to be cropped
+   */
+  aspectRatio: Record<string, string> | null;
+
   fileValidators: FileValidators;
   collectionValidators: CollectionValidators;
 
