@@ -267,6 +267,8 @@ export type ConfigType = {
    * the following properties from MediaRecorderOptions
    */
   mediaRecorerOptions: MediaRecorderOptions | null
+
+  maskHrefCloudEditor: string | null;
 };
 export type ConfigComplexType = Pick<ConfigType, (typeof complexConfigKeys)[number]>;
 export type ConfigPlainType = Omit<ConfigType, keyof ConfigComplexType>;

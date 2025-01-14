@@ -172,6 +172,7 @@ const mapping = {
   mediaRecorerOptions: asObject,
 
   maxVideoRecordingDuration: asNumber,
+  maskHrefCloudEditor: asString,
 };
 
 /**
