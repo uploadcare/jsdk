@@ -1,12 +1,15 @@
 // @ts-check
 
 /** @param {string} value */
-export const deserealizeCsv = (value) => {
+export const deserializeCsv = (value) => {
   if (!value) {
     return [];
   }
 
-  return value.split(',').map((item) => item.trim());
+  return value
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean);
 };
 
 /** @param {unknown[]} value */

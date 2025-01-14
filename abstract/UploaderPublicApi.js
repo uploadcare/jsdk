@@ -4,11 +4,12 @@ import { ActivityBlock } from './ActivityBlock.js';
 import { applyStyles, Data } from '@symbiotejs/symbiote';
 import { EventType } from '../blocks/UploadCtxProvider/EventEmitter.js';
 import { UploadSource } from '../blocks/utils/UploadSource.js';
-import { serializeCsv } from '../blocks/utils/comma-separated.js';
+import { deserializeCsv, serializeCsv } from '../blocks/utils/comma-separated.js';
 import { IMAGE_ACCEPT_LIST, fileIsImage, mergeFileTypes } from '../utils/fileTypes.js';
 import { parseCdnUrl } from '../utils/parseCdnUrl.js';
 import { buildOutputCollectionState } from './buildOutputCollectionState.js';
 import { stringToArray } from '../utils/stringToArray.js';
+import { CameraSourceTypes } from '../blocks/CameraSource/constants.js';
 
 export class UploaderPublicApi {
   /**
@@ -141,15 +142,6 @@ export class UploaderPublicApi {
     const accept = serializeCsv(
       mergeFileTypes([this.cfg.accept ?? '', ...(this.cfg.imgOnly ? IMAGE_ACCEPT_LIST : [])]),
     );
-
-    if (this.cfg.accept && !!this.cfg.imgOnly) {
-      console.warn(
-        'There could be a mistake.\n' +
-          'Both `accept` and `imgOnly` parameters are set.\n' +
-          'The value of `accept` will be concatenated with the internal image mime types list.',
-      );
-    }
-
     const INPUT_ATTR_NAME = 'uploadcare-file-input';
     const fileInput = document.createElement('input');
     fileInput.setAttribute(INPUT_ATTR_NAME, '');
@@ -163,7 +155,8 @@ export class UploaderPublicApi {
     fileInput.multiple = this.cfg.multiple;
     if (options.captureCamera) {
       fileInput.capture = this.cfg.cameraCapture;
-      fileInput.accept = this.cfg.enableVideoRecording ? ['image/*', 'video/*'].join(',') : 'image/*';
+      const isVideoRecordingEnabled = deserializeCsv(this.cfg.cameraModes).includes(CameraSourceTypes.VIDEO);
+      fileInput.accept = ['image/*', isVideoRecordingEnabled && 'video/*'].filter(Boolean).join(',');
     } else {
       fileInput.accept = accept;
     }

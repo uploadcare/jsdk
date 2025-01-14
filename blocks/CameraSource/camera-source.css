@@ -109,6 +109,7 @@ uc-camera-source .uc-controls {
 
 uc-camera-source .uc-switcher {
   display: flex;
+  gap: var(--uc-padding);
 }
 uc-camera-source .uc-switch.uc-active {
   background-color: var(--uc-secondary);

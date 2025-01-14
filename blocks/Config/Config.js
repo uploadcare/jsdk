@@ -4,6 +4,8 @@ import { initialConfig } from './initialConfig.js';
 import { sharedConfigKey } from '../../abstract/sharedConfigKey.js';
 import { toKebabCase } from '../../utils/toKebabCase.js';
 import { normalizeConfigValue } from './normalizeConfigValue.js';
+import { runAssertions } from './assertions.js';
+import { runSideEffects } from './side-effects.js';
 
 const allConfigKeys = /** @type {(keyof import('../../types').ConfigType)[]} */ ([
   // "debug" option should go first to be able to print debug messages from the very beginning
@@ -21,7 +23,7 @@ const allConfigKeys = /** @type {(keyof import('../../types').ConfigType)[]} */ 
  *   'iconHrefResolver',
  *   'fileValidators',
  *   'collectionValidators',
- *   'mediaRecorerOptions',
+ *   'mediaRecorderOptions',
  * ]}
  */
 export const complexConfigKeys = [
@@ -32,7 +34,7 @@ export const complexConfigKeys = [
   'iconHrefResolver',
   'fileValidators',
   'collectionValidators',
-  'mediaRecorerOptions',
+  'mediaRecorderOptions',
 ];
 
 /** @type {(key: keyof import('../../types').ConfigType) => key is keyof import('../../types').ConfigComplexType} */
@@ -136,6 +138,14 @@ class ConfigClass extends Block {
     this._flushValueToState(key, normalizedValue);
 
     this.debugPrint(`[uc-config] "${key}"`, normalizedValue);
+
+    runAssertions(this.cfg);
+    runSideEffects({
+      key,
+      value: normalizedValue ?? null,
+      setValue: this._setValue.bind(this),
+      getValue: this._getValue.bind(this),
+    });
   }
 
   /**
@@ -145,7 +155,7 @@ class ConfigClass extends Block {
   _getValue(key) {
     const anyThis = /** @type {typeof this & any} */ (this);
     const localPropName = getLocalPropName(key);
-    return anyThis[localPropName];
+    return anyThis[localPropName] ?? this.$[sharedConfigKey(key)];
   }
 
   /**

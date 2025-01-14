@@ -68,9 +68,10 @@ export const initialConfig = {
   fileValidators: [],
   collectionValidators: [],
 
-  defaultCameraMode: 'photo',
+  cameraModes: 'photo, video',
+  defaultCameraMode: null,
   enableAudioRecording: true,
-  enableVideoRecording: true,
+  enableVideoRecording: null,
   maxVideoRecordingDuration: null,
-  mediaRecorerOptions: null,
+  mediaRecorderOptions: null,
 };

@@ -1,5 +1,7 @@
 // @ts-check
 
+import { CameraSourceTypes } from '../CameraSource/constants.js';
+import { deserializeCsv } from '../utils/comma-separated.js';
 import { initialConfig } from './initialConfig.js';
 
 /** @param {unknown} value */
@@ -31,18 +33,28 @@ const asStore = (value) => (value === 'auto' ? value : asBoolean(value));
 const asCameraCapture = (value) => {
   const strValue = asString(value);
   if (strValue !== 'user' && strValue !== 'environment' && strValue !== '') {
-    throw new Error(`Invalid "cameraCapture" value: "${strValue}"`);
+    throw new Error(`Invalid value: "${strValue}"`);
   }
   return strValue;
 };
 
 /** @param {unknown} value */
-const asCameraTab = (value) => {
+const asCameraMode = (value) => {
   const strValue = asString(value);
-  if (strValue !== 'photo' && strValue !== 'video') {
-    throw new Error(`Invalid "CameraTab" value: "${strValue}"`);
+  if (!Object.values(CameraSourceTypes).includes(strValue)) {
+    throw new Error(`Invalid value: "${strValue}"`);
   }
-  return strValue;
+  return /** @type {import('../CameraSource/CameraSource.js').CameraMode} */ (strValue);
+};
+
+/** @param {unknown} value */
+const asCameraModes = (value) => {
+  const str = asString(value);
+  const array = deserializeCsv(str);
+  if (array.some((item) => !Object.values(CameraSourceTypes).includes(item))) {
+    throw new Error(`Invalid value: "${array}"`);
+  }
+  return str;
 };
 
 /** @param {unknown} value */
@@ -166,10 +178,11 @@ const mapping = {
   fileValidators: /** @type {typeof asArray<import('../../types').FileValidators>} */ (asArray),
   collectionValidators: /** @type {typeof asArray<import('../../types').CollectionValidators>} */ (asArray),
 
-  defaultCameraMode: asCameraTab,
+  cameraModes: asCameraModes,
+  defaultCameraMode: asCameraMode,
   enableAudioRecording: asBoolean,
   enableVideoRecording: asBoolean,
-  mediaRecorerOptions: asObject,
+  mediaRecorderOptions: asObject,
 
   maxVideoRecordingDuration: asNumber,
 };

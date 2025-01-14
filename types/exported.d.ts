@@ -1,6 +1,7 @@
 import type { LocaleDefinition } from '../abstract/localeRegistry';
 import type { complexConfigKeys } from '../blocks/Config/Config';
 import type { FuncFileValidator, FuncCollectionValidator } from '../abstract/ValidationManager';
+import type { CameraMode } from '../blocks/CameraSource/CameraSource';
 
 export type { FuncFileValidator, FuncCollectionValidator } from '../abstract/ValidationManager';
 export type { UploaderPublicApi } from '../abstract/UploaderPublicApi';
@@ -21,7 +22,7 @@ export type SecureUploadsSignatureResolver = () => Promise<SecureUploadsSignatur
 export type IconHrefResolver = (iconName: string) => string;
 export type FileValidators = FuncFileValidator[];
 export type CollectionValidators = FuncCollectionValidator[];
-export type SourceTypes = import('../blocks/utils/UploadSource').SourceTypes
+export type SourceTypes = import('../blocks/utils/UploadSource').SourceTypes;
 
 export type ConfigType = {
   /**
@@ -240,11 +241,20 @@ export type ConfigType = {
   collectionValidators: CollectionValidators;
 
   /**
-   * The default tab to open in the camera modal, 
-   * it is possible to select video or photo capture
-   * @default 'photo'
+   * The camera modes to enable in the camera modal,
+   * it is possible to select photo or video capture.
+   * The first mode is the default mode.
+   * @default 'photo,video'
    */
-  defaultCameraMode: 'photo' | 'video';
+  cameraModes: string;
+
+  /**
+   * The default tab to open in the camera modal,
+   * it is possible to select video or photo capture
+   * @default 'null'
+   * @deprecated - use `cameraModes` instead
+   */
+  defaultCameraMode: CameraMode | null;
   /**
    * Enable audio recording.
    * @default true
@@ -252,21 +262,22 @@ export type ConfigType = {
   enableAudioRecording: boolean;
   /**
    * Enable video recording.
-   * @default true
+   * @deprecated - use `cameraModes` instead
+   * @default null
    */
-  enableVideoRecording: boolean;
+  enableVideoRecording: boolean | null;
 
   /**
    * The maximum duration of the video recording in seconds
    * @default null
    */
-  maxVideoRecordingDuration: number | null
+  maxVideoRecordingDuration: number | null;
 
   /**
-   * A dictionary object that can contain 
+   * A dictionary object that can contain
    * the following properties from MediaRecorderOptions
    */
-  mediaRecorerOptions: MediaRecorderOptions | null
+  mediaRecorderOptions: MediaRecorderOptions | null;
 };
 export type ConfigComplexType = Pick<ConfigType, (typeof complexConfigKeys)[number]>;
 export type ConfigPlainType = Omit<ConfigType, keyof ConfigComplexType>;
@@ -274,8 +285,8 @@ export type ConfigAttributesType = KebabCaseKeys<ConfigPlainType> & LowerCaseKey
 
 export type KebabCase<S extends string> = S extends `${infer C}${infer T}`
   ? T extends Uncapitalize<T>
-  ? `${Uncapitalize<C>}${KebabCase<T>}`
-  : `${Uncapitalize<C>}-${KebabCase<T>}`
+    ? `${Uncapitalize<C>}${KebabCase<T>}`
+    : `${Uncapitalize<C>}-${KebabCase<T>}`
   : S;
 export type KebabCaseKeys<T extends Record<string, unknown>> = { [Key in keyof T as KebabCase<Key & string>]: T[Key] };
 export type LowerCase<S extends string> = Lowercase<S>;
@@ -283,9 +294,10 @@ export type LowerCaseKeys<T extends Record<string, unknown>> = { [Key in keyof T
 
 export type OutputFileStatus = 'idle' | 'uploading' | 'success' | 'failed' | 'removed';
 
-export type OutputCustomErrorType = 'CUSTOM_ERROR'
+export type OutputCustomErrorType = 'CUSTOM_ERROR';
 
-export type OutputFileErrorType = OutputCustomErrorType
+export type OutputFileErrorType =
+  | OutputCustomErrorType
   | 'NOT_AN_IMAGE'
   | 'FORBIDDEN_FILE_TYPE'
   | 'FILE_SIZE_EXCEEDED'
@@ -293,7 +305,11 @@ export type OutputFileErrorType = OutputCustomErrorType
   | 'NETWORK_ERROR'
   | 'UNKNOWN_ERROR';
 
-export type OutputCollectionErrorType = OutputCustomErrorType | 'SOME_FILES_HAS_ERRORS' | 'TOO_MANY_FILES' | 'TOO_FEW_FILES';
+export type OutputCollectionErrorType =
+  | OutputCustomErrorType
+  | 'SOME_FILES_HAS_ERRORS'
+  | 'TOO_MANY_FILES'
+  | 'TOO_FEW_FILES';
 
 export type OutputFileErrorPayload = {
   entry: OutputFileEntry;
@@ -327,22 +343,23 @@ export type OutputErrorTypePayload = {
   CUSTOM_ERROR: Record<string, unknown>;
 };
 
-export type OutputError<T extends OutputFileErrorType | OutputCollectionErrorType> =
-  T extends OutputCustomErrorType
+export type OutputError<T extends OutputFileErrorType | OutputCollectionErrorType> = T extends OutputCustomErrorType
   ? {
-    type?: T;
-    message: string;
-    payload?: OutputErrorTypePayload[T];
-  }
-  : T extends keyof OutputErrorTypePayload ? {
-    type: T;
-    message: string;
-    payload?: OutputErrorTypePayload[T];
-  } : never
+      type?: T;
+      message: string;
+      payload?: OutputErrorTypePayload[T];
+    }
+  : T extends keyof OutputErrorTypePayload
+    ? {
+        type: T;
+        message: string;
+        payload?: OutputErrorTypePayload[T];
+      }
+    : never;
 
-export type OutputErrorFile = OutputError<OutputFileErrorType>
+export type OutputErrorFile = OutputError<OutputFileErrorType>;
 
-export type OutputErrorCollection = OutputError<OutputCollectionErrorType>
+export type OutputErrorCollection = OutputError<OutputCollectionErrorType>;
 
 export type OutputFileEntry<TStatus extends OutputFileStatus = OutputFileStatus> = {
   status: TStatus;
@@ -360,7 +377,7 @@ export type OutputFileEntry<TStatus extends OutputFileStatus = OutputFileStatus>
   fullPath: string | null;
   source: SourceTypes | null;
 } & (
-    | {
+  | {
       status: 'success';
       fileInfo: UploadcareFile;
       uuid: string;
@@ -372,7 +389,7 @@ export type OutputFileEntry<TStatus extends OutputFileStatus = OutputFileStatus>
       isRemoved: false;
       errors: [];
     }
-    | {
+  | {
       status: 'failed';
       fileInfo: UploadcareFile | null;
       uuid: string | null;
@@ -384,7 +401,7 @@ export type OutputFileEntry<TStatus extends OutputFileStatus = OutputFileStatus>
       isRemoved: false;
       errors: OutputError<OutputFileErrorType>[];
     }
-    | {
+  | {
       status: 'uploading';
       fileInfo: null;
       uuid: null;
@@ -396,7 +413,7 @@ export type OutputFileEntry<TStatus extends OutputFileStatus = OutputFileStatus>
       isRemoved: false;
       errors: [];
     }
-    | {
+  | {
       status: 'removed';
       fileInfo: UploadcareFile | null;
       uuid: string | null;
@@ -408,7 +425,7 @@ export type OutputFileEntry<TStatus extends OutputFileStatus = OutputFileStatus>
       isRemoved: true;
       errors: OutputError<OutputFileErrorType>[];
     }
-    | {
+  | {
       status: 'idle';
       fileInfo: null;
       uuid: null;
@@ -420,7 +437,7 @@ export type OutputFileEntry<TStatus extends OutputFileStatus = OutputFileStatus>
       isRemoved: false;
       errors: [];
     }
-  );
+);
 
 export type OutputCollectionStatus = 'idle' | 'uploading' | 'success' | 'failed';
 
@@ -444,43 +461,43 @@ export type OutputCollectionState<
 } & (TGroupFlag extends 'has-group'
   ? { group: UploadcareGroup }
   : TGroupFlag extends 'maybe-has-group'
-  ? { group: UploadcareGroup | null }
-  : never) &
+    ? { group: UploadcareGroup | null }
+    : never) &
   (
     | {
-      status: 'idle';
-      isFailed: false;
-      isUploading: false;
-      isSuccess: false;
-      errors: [];
-      allEntries: OutputFileEntry<'idle' | 'success'>[];
-    }
+        status: 'idle';
+        isFailed: false;
+        isUploading: false;
+        isSuccess: false;
+        errors: [];
+        allEntries: OutputFileEntry<'idle' | 'success'>[];
+      }
     | {
-      status: 'uploading';
-      isFailed: false;
-      isUploading: true;
-      isSuccess: false;
-      errors: [];
-      allEntries: OutputFileEntry[];
-    }
+        status: 'uploading';
+        isFailed: false;
+        isUploading: true;
+        isSuccess: false;
+        errors: [];
+        allEntries: OutputFileEntry[];
+      }
     | {
-      status: 'success';
-      isFailed: false;
-      isUploading: false;
-      isSuccess: true;
-      errors: [];
-      allEntries: OutputFileEntry<'success'>[];
-    }
+        status: 'success';
+        isFailed: false;
+        isUploading: false;
+        isSuccess: true;
+        errors: [];
+        allEntries: OutputFileEntry<'success'>[];
+      }
     | {
-      status: 'failed';
-      isFailed: true;
-      isUploading: false;
-      isSuccess: false;
-      errors: OutputError<OutputCollectionErrorType>[];
-      allEntries: OutputFileEntry[];
-    }
+        status: 'failed';
+        isFailed: true;
+        isUploading: false;
+        isSuccess: false;
+        errors: OutputError<OutputCollectionErrorType>[];
+        allEntries: OutputFileEntry[];
+      }
   );
 
 export { EventType, EventPayload } from '../blocks/UploadCtxProvider/EventEmitter';
 
-export { };
+export {};
