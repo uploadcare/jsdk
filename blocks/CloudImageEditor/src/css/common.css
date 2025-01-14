@@ -1190,3 +1190,7 @@ uc-presence-toggle.uc-initial {
 [uc-cloud-image-editor] button:focus-visible {
   outline: 1px auto -webkit-focus-ring-color;
 }
+
+[uc-cloud-image-editor] .uc-cloud-mask {
+  pointer-events: none;
+}
