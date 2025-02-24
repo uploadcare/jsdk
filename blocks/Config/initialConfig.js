@@ -74,4 +74,6 @@ export const initialConfig = {
   enableVideoRecording: null,
   maxVideoRecordingDuration: null,
   mediaRecorderOptions: null,
+
+  cloudImageEditorMaskHref: null,
 };

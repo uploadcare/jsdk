@@ -185,6 +185,7 @@ const mapping = {
   mediaRecorderOptions: asObject,
 
   maxVideoRecordingDuration: asNumber,
+  cloudImageEditorMaskHref: asString,
 };
 
 /**

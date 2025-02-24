@@ -446,10 +446,54 @@ export class CropFrame extends Block {
     this.ref['svg-el'].style.cursor = hoverThumb ? thumbCursor(hoverThumb.direction) : 'initial';
   }
 
+  /**
+   * @private
+   * @param {String} href
+   */
+  _createMask(href) {
+    if (this._frameImage) {
+      this._frameImage.setAttribute('href', href);
+      return;
+    }
+
+    let svg = this.ref['svg-el'];
+    let fr = document.createDocumentFragment();
+
+    let imageNode = createSvgNode('image', {
+      href,
+    });
+
+    imageNode.setAttribute('class', 'uc-cloud-mask');
+
+    fr.appendChild(imageNode);
+
+    svg.appendChild(fr);
+
+    this._frameImage = imageNode;
+  }
+
+  _updateMask() {
+    let cropBox = this.$['*cropBox'];
+
+    if (!cropBox || !this._frameImage) {
+      return;
+    }
+
+    let { x, y, width, height } = cropBox;
+
+    setSvgNodeAttrs(this._frameImage, {
+      x,
+      y,
+      height,
+      width,
+    });
+  }
+
   /** @private */
   _render() {
     this._updateBackdrop();
     this._updateFrame();
+    this._updateMask();
   }
 
   /** @param {boolean} visible */
@@ -489,6 +533,12 @@ export class CropFrame extends Block {
       window.requestAnimationFrame(() => {
         this._render();
       });
+    });
+
+    this.subConfigValue('cloudImageEditorMaskHref', (maskHref) => {
+      if (maskHref) {
+        this._createMask(maskHref);
+      }
     });
 
     this.sub('dragging', (dragging) => {
