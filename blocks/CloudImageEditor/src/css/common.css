@@ -1191,3 +1191,7 @@ uc-presence-toggle.uc-initial {
   outline: 1px auto Highlight;
   outline: 1px auto -webkit-focus-ring-color;
 }
+
+[uc-cloud-image-editor] .uc-cloud-mask {
+  pointer-events: none;
+}
